@@ -1,4 +1,4 @@
-![Frame 10970](https://github.com/tomcru/holy-loader/assets/35841182/23b8e2fa-390b-413d-9fa6-258b44c39ff9)
+![Holy Loader](https://github.com/tomcru/holy-loader/assets/35841182/cd2d108a-6429-40c4-9881-df8b79cc9725)
 
 <h1>Holy Loader</h1>
 <a href="https://www.npmjs.com/package/holy-loader"><img src="https://img.shields.io/npm/v/holy-loader.svg?style=flat" /></a>
