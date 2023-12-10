@@ -44,6 +44,10 @@
     "url": "https://github.com/tomcru/holy-loader/issues"
   },
   "homepage": "https://github.com/tomcru/holy-loader#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomcru/holy-loader.git"
+  },
   "devDependencies": {
     "@types/nprogress": "^0.2.3",
     "@types/react": "^18.2.43",
