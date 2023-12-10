@@ -1,0 +1,30 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request_target:
+    branches: [main, dev]
+  workflow_dispatch:
+
+jobs:
+  unit:
+    name: Vitest Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    strategy:
+      matrix:
+        node-version: [18, 20]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - name: Install all dependencies
+        run: npm ci
+      - name: Run Vitest Unit Tests
+        run: npm run test
