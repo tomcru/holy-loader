@@ -1,0 +1,54 @@
+{
+  "name": "holy-loader",
+  "version": "1.0.0",
+  "description": "HolyLoader is a lightweight, customizable top-loading progress bar component for React applications.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "react-loader",
+    "progress-bar",
+    "loading-indicator",
+    "nprogress",
+    "react-progress-bar",
+    "web-performance",
+    "user-interface",
+    "top-loader",
+    "loading-bar",
+    "ui-components",
+    "react-ui",
+    "react-component",
+    "front-end",
+    "website-interactivity",
+    "asynchronous-loading",
+    "page-load",
+    "nextjs",
+    "single-page-application"
+  ],
+  "scripts": {
+    "build": "tsup && sed -i '' '1s/^/\"use client\";/' dist/index.js",
+    "lint:fix": "eslint --fix src/ && npm run format:fix",
+    "format:fix": "prettier --write \"src/**/*.{ts,tsx}\""
+  },
+  "dependencies": {
+    "nprogress": "^0.2.0",
+    "react": "^18.2.0"
+  },
+  "files": [
+    "dist/**/*.js*",
+    "dist/**/*.mjs*",
+    "dist/**/*.d*"
+  ],
+  "bugs": {
+    "url": "https://github.com/tomcru/holy-loader/issues"
+  },
+  "homepage": "https://github.com/tomcru/holy-loader#readme",
+  "devDependencies": {
+    "@types/nprogress": "^0.2.3",
+    "@types/react": "^18.2.43",
+    "@typescript-eslint/eslint-plugin": "^6.13.2",
+    "eslint": "^8.55.0",
+    "tsup": "^8.0.1"
+  }
+}
