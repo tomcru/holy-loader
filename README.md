@@ -9,6 +9,8 @@
 
 ⚠️ Next.js 14.0.3 added experimental support for history.pushState and history.replaceState, breaking Holy Loader. It has been fixed in Next.js 14.0.4: https://github.com/vercel/next.js/pull/58861
 
+Want to see it in use? Visit: [GameGator](https://main.gamegator.net).
+
 Also check out [Holy Time](https://github.com/badosz0/holy-time), yet another (type-safe) date time library.
 
 ## Features
@@ -26,12 +28,18 @@ To install Holy Loader, run the following command in your project directory:
 npm install holy-loader
 ```
 
+OR
+
+```bash
+yarn add holy-loader
+```
+
 ## Usage
 
 To use Holy Loader in your Next.js application using the app router:
 
 ```typescript
-import HolyLoader from 'holy-loader';
+import HolyLoader from "holy-loader";
 
 export default function RootLayout({ children }) {
   return (
@@ -46,7 +54,7 @@ export default function RootLayout({ children }) {
 To use Holy Loader in your Next.js application using the pages router:
 
 ```typescript
-import HolyLoader from 'holy-loader';
+import HolyLoader from "holy-loader";
 
 export default function App({ Component, pageProps }) {
   return (
@@ -61,8 +69,8 @@ export default function App({ Component, pageProps }) {
 ### Custom Configuration
 
 ```typescript
-import React from 'react';
-import HolyLoader from 'holy-loader';
+import React from "react";
+import HolyLoader from "holy-loader";
 
 export default function RootLayout({ children }) {
   return (
