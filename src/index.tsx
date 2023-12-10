@@ -1,6 +1,6 @@
-import * as React from 'react';
-import * as NProgress from 'nprogress';
-import { DEFAULTS } from './constants';
+import * as React from "react";
+import * as NProgress from "nprogress";
+import { DEFAULTS } from "./constants";
 
 export type HolyLoaderProps = {
   /**
@@ -53,6 +53,19 @@ export type HolyLoaderProps = {
 };
 
 /**
+ * Determines if two URLs refer to the same page, differing only by the anchor.
+ *
+ * @param {string} currentUrl The current URL.
+ * @param {string} newUrl The new URL to compare with the current URL.
+ * @returns {boolean} True if the URLs refer to the same page (excluding the anchor), false otherwise.
+ */
+export const isSamePageAnchor = (currentUrl: string, newUrl: string) => {
+  const current = new URL(currentUrl);
+  const next = new URL(newUrl);
+  return current.href.split("#")[0] === next.href.split("#")[0];
+};
+
+/**
  * HolyLoader is a React component that provides a customizable top-loading progress bar.
  * It uses the NProgress library for progress display and offers various props for customization.
  *
@@ -98,19 +111,6 @@ const HolyLoader = ({
     });
 
     /**
-     * Determines if two URLs refer to the same page, differing only by the anchor.
-     *
-     * @param {string} currentUrl The current URL.
-     * @param {string} newUrl The new URL to compare with the current URL.
-     * @returns {boolean} True if the URLs refer to the same page (excluding the anchor), false otherwise.
-     */
-    const isSamePageAnchor = (currentUrl: string, newUrl: string) => {
-      const current = new URL(currentUrl);
-      const next = new URL(newUrl);
-      return current.href.split('#')[0] === next.href.split('#')[0];
-    };
-
-    /**
      * Handles click events on anchor tags, starting the NProgress bar for page navigation.
      * It checks for various conditions to decide whether to start the progress bar or not.
      *
@@ -119,13 +119,13 @@ const HolyLoader = ({
     const handleClick = (event: MouseEvent) => {
       try {
         const target = event.target as HTMLElement;
-        const anchor = target.closest('a');
+        const anchor = target.closest("a");
         if (
           !anchor ||
-          anchor.target === '_blank' ||
+          anchor.target === "_blank" ||
           event.ctrlKey ||
           event.metaKey ||
-          anchor.href.startsWith('blob:')
+          anchor.href.startsWith("blob:")
         ) {
           return;
         }
@@ -133,7 +133,7 @@ const HolyLoader = ({
         NProgress.start();
         if (isSamePageAnchor(window.location.href, anchor.href)) {
           NProgress.done();
-          document.documentElement.classList.remove('nprogress-busy');
+          document.documentElement.classList.remove("nprogress-busy");
         } else {
           overridePushState();
         }
@@ -151,15 +151,15 @@ const HolyLoader = ({
       const originalPushState = history.pushState;
       history.pushState = (...args) => {
         NProgress.done();
-        document.documentElement.classList.remove('nprogress-busy');
+        document.documentElement.classList.remove("nprogress-busy");
         originalPushState.apply(history, args);
       };
     };
 
-    document.addEventListener('click', handleClick);
+    document.addEventListener("click", handleClick);
 
     return () => {
-      document.removeEventListener('click', handleClick);
+      document.removeEventListener("click", handleClick);
     };
   }, []);
 

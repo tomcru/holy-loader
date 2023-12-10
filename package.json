@@ -29,7 +29,9 @@
   "scripts": {
     "build": "tsup && sed -i '' '1s/^/\"use client\";/' dist/index.js",
     "lint:fix": "eslint --fix src/ && npm run format:fix",
-    "format:fix": "prettier --write \"src/**/*.{ts,tsx}\""
+    "format:fix": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "test:watch": "vitest watch -c ./vitest.config.ts",
+    "test": "vitest -c ./vitest.config.ts"
   },
   "dependencies": {
     "nprogress": "^0.2.0",
@@ -53,6 +55,7 @@
     "@types/react": "^18.2.43",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "eslint": "^8.55.0",
-    "tsup": "^8.0.1"
+    "tsup": "^8.0.1",
+    "vitest": "^1.0.4"
   }
 }
