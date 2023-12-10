@@ -30,7 +30,6 @@
     "build": "tsup && sed -i '' '1s/^/\"use client\";/' dist/index.js",
     "lint:fix": "eslint --fix src/ && npm run format:fix",
     "format:fix": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "test:watch": "vitest watch -c ./vitest.config.ts",
     "test": "vitest -c ./vitest.config.ts"
   },
   "dependencies": {

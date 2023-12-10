@@ -53,6 +53,17 @@ export type HolyLoaderProps = {
 };
 
 /**
+ * Converts a given URL to an absolute URL based on the current window location.
+ * If the input URL is already absolute, it remains unchanged.
+ *
+ * @param {string} url - The URL to be converted. Can be an absolute or relative URL.
+ * @returns {string} The absolute URL derived from the given URL and the current window location.
+ */
+export const toAbsoluteURL = (url: string) => {
+  return new URL(url, window.location.href).href;
+};
+
+/**
  * Determines if two URLs refer to the same page, differing only by the anchor.
  *
  * @param {string} currentUrl The current URL.
@@ -60,8 +71,8 @@ export type HolyLoaderProps = {
  * @returns {boolean} True if the URLs refer to the same page (excluding the anchor), false otherwise.
  */
 export const isSamePageAnchor = (currentUrl: string, newUrl: string) => {
-  const current = new URL(currentUrl);
-  const next = new URL(newUrl);
+  const current = new URL(toAbsoluteURL(currentUrl));
+  const next = new URL(toAbsoluteURL(newUrl));
   return current.href.split("#")[0] === next.href.split("#")[0];
 };
 

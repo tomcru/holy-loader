@@ -15,8 +15,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": true,
     "outDir": "dist",
-    "noEmit": true,
-    "allowImportingTsExtensions": true
+    "noEmit": true
   },
   "files": ["src/index.tsx"]
 }
