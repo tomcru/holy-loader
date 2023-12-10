@@ -1,6 +1,6 @@
 {
   "name": "holy-loader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "HolyLoader is a lightweight, customizable top-loading progress bar component for React applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
