@@ -9,6 +9,12 @@ globalThis.window = {
 };
 
 describe("isSamePageAnchor", () => {
+  it("should return true for the same URL", () => {
+    const currentUrl = "https://example.com/page";
+    const newUrl = "https://example.com/page";
+    expect(isSamePageAnchor(currentUrl, newUrl)).toBe(true);
+  });
+
   it("should return true for URLs differing only by hash", () => {
     const currentUrl = "https://example.com/page#section1";
     const newUrl = "https://example.com/page#section2";
