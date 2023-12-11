@@ -136,18 +136,16 @@ const HolyLoader = ({
           anchor.target === "_blank" ||
           event.ctrlKey ||
           event.metaKey ||
-          anchor.href.startsWith("blob:")
+          // Skip if URL is a same-page anchor (href="#", href="#top", etc.).
+          isSamePageAnchor(window.location.href, anchor.href) ||
+          // Skip if URL uses a non-http/https protocol (mailto:, tel:, etc.).
+          !toAbsoluteURL(anchor.href).startsWith("http")
         ) {
           return;
         }
 
         NProgress.start();
-        if (isSamePageAnchor(window.location.href, anchor.href)) {
-          NProgress.done();
-          document.documentElement.classList.remove("nprogress-busy");
-        } else {
-          overridePushState();
-        }
+        overridePushState();
       } catch (error) {
         NProgress.start();
         NProgress.done();
