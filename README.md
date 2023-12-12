@@ -110,4 +110,4 @@ Holy Loader accepts the following props for customization:
 - `speed` (number): Sets the animation speed of the top-loading bar in milliseconds. Default: 200 milliseconds.
 - `zIndex` (number): Defines the z-index property of the top-loading bar, controlling its stacking order. Default: 2147483647.
 
-Project inspired by [nextjs-toploader](https://github.com/TheSGJ/nextjs-toploader).
+Project inspired by [nextjs-toploader](https://github.com/TheSGJ/nextjs-toploader) & [nprogress](https://github.com/rstacruz/nprogress)
