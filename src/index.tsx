@@ -1,8 +1,8 @@
-import * as React from "react";
-import { HolyProgress } from "./HolyProgress";
-import { DEFAULTS } from "./constants";
+import * as React from 'react';
+import { HolyProgress } from './HolyProgress';
+import { DEFAULTS } from './constants';
 
-export type HolyLoaderProps = {
+export interface HolyLoaderProps {
   /**
    * Specifies the color of the top-loading bar.
    * Default: "#59a2ff" (a shade of blue)
@@ -50,7 +50,7 @@ export type HolyLoaderProps = {
    * Default: 2147483647
    */
   zIndex?: number;
-};
+}
 
 /**
  * Converts a given URL to an absolute URL based on the current window location.
@@ -72,11 +72,11 @@ export const toAbsoluteURL = (url: string): string => {
  */
 export const isSamePageAnchor = (
   currentUrl: string,
-  newUrl: string
+  newUrl: string,
 ): boolean => {
   const current = new URL(toAbsoluteURL(currentUrl));
   const next = new URL(toAbsoluteURL(newUrl));
-  return current.href.split("#")[0] === next.href.split("#")[0];
+  return current.href.split('#')[0] === next.href.split('#')[0];
 };
 
 /**
@@ -94,7 +94,6 @@ export const isSameOrigin = (currentUrl: string, newUrl: string): boolean => {
 
 /**
  * HolyLoader is a React component that provides a customizable top-loading progress bar.
- * It uses the NProgress library for progress display and offers various props for customization.
  *
  * @param {HolyLoaderProps} props The properties for configuring the HolyLoader.
  * @returns {JSX.Element} The styles element to be rendered.
@@ -108,7 +107,7 @@ const HolyLoader = ({
   easing = DEFAULTS.easing,
   speed = DEFAULTS.speed,
   zIndex = DEFAULTS.zIndex,
-}: HolyLoaderProps) => {
+}: HolyLoaderProps): JSX.Element => {
   React.useEffect(() => {
     const holyProgress = new HolyProgress({
       color,
@@ -130,10 +129,10 @@ const HolyLoader = ({
     const handleClick = (event: MouseEvent) => {
       try {
         const target = event.target as HTMLElement;
-        const anchor = target.closest("a");
+        const anchor = target.closest('a');
         if (
-          !anchor ||
-          anchor.target === "_blank" ||
+          anchor === null ||
+          anchor.target === '_blank' ||
           event.ctrlKey ||
           event.metaKey ||
           // Skip if URL points to a different domain
@@ -141,7 +140,7 @@ const HolyLoader = ({
           // Skip if URL is a same-page anchor (href="#", href="#top", etc.).
           isSamePageAnchor(window.location.href, anchor.href) ||
           // Skip if URL uses a non-http/https protocol (mailto:, tel:, etc.).
-          !toAbsoluteURL(anchor.href).startsWith("http")
+          !toAbsoluteURL(anchor.href).startsWith('http')
         ) {
           return;
         }
@@ -158,19 +157,18 @@ const HolyLoader = ({
      * Overrides the history.pushState function to stop the NProgress bar
      * when navigating to a new page without a full page reload.
      */
-    const overridePushState = () => {
-      const originalPushState = history.pushState;
+    const overridePushState = (): void => {
+      const originalPushState = history.pushState.bind(history);
       history.pushState = (...args) => {
         holyProgress.done();
-        document.documentElement.classList.remove("nprogress-busy");
-        originalPushState.apply(history, args);
+        originalPushState(...args);
       };
     };
 
-    document.addEventListener("click", handleClick);
+    document.addEventListener('click', handleClick);
 
     return () => {
-      document.removeEventListener("click", handleClick);
+      document.removeEventListener('click', handleClick);
     };
   }, []);
 

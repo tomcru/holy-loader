@@ -48,7 +48,7 @@ type HolyProgressProps = {
   zIndex: number;
 };
 
-type TransformStrategy = "translate3d" | "translate" | "margin";
+type TransformStrategy = 'translate3d' | 'translate' | 'margin';
 
 /**
  * Class representing a HolyProgress bar.
@@ -56,8 +56,10 @@ type TransformStrategy = "translate3d" | "translate" | "margin";
  * @classdesc A flexible, customizable progress bar for web applications.
  */
 export class HolyProgress {
-  private settings: HolyProgressProps;
+  private readonly settings: HolyProgressProps;
+
   private status: number | null;
+
   private bar: HTMLElement | null;
 
   /**
@@ -67,11 +69,11 @@ export class HolyProgress {
   constructor(customSettings?: Partial<HolyProgressProps>) {
     const defaultSettings: HolyProgressProps = {
       initialPosition: 0.08,
-      easing: "linear",
+      easing: 'linear',
       speed: 200,
       trickle: true,
       trickleSpeed: 200,
-      color: "#59a2ff",
+      color: '#59a2ff',
       height: 4,
       zIndex: 2147483647,
     };
@@ -87,8 +89,8 @@ export class HolyProgress {
    * @param {number} n - The new progress value (0 to 1).
    * @returns {HolyProgress} The current instance for chaining methods.
    */
-  private setTo = (n: number): HolyProgress => {
-    const isStarted = typeof this.status === "number";
+  private readonly setTo = (n: number): HolyProgress => {
+    const isStarted = typeof this.status === 'number';
 
     n = this.clamp(n, this.settings.initialPosition, 1);
 
@@ -96,7 +98,7 @@ export class HolyProgress {
 
     const progress = this.getOrCreateBar(!isStarted);
 
-    if (!progress) {
+    if (progress === null) {
       return this;
     }
 
@@ -107,7 +109,7 @@ export class HolyProgress {
     this.queue((next) => {
       const css = this.barPositionCSS(n);
 
-      if (!this.bar) {
+      if (this.bar === null) {
         return;
       }
 
@@ -116,13 +118,13 @@ export class HolyProgress {
       });
 
       if (n === 1) {
-        progress.style.transition = "none";
-        progress.style.opacity = "1";
+        progress.style.transition = 'none';
+        progress.style.opacity = '1';
         this.repaint(progress);
 
         setTimeout(() => {
-          progress.style.transition = "all " + speed + "ms linear";
-          progress.style.opacity = "0";
+          progress.style.transition = 'all ' + speed + 'ms linear';
+          progress.style.opacity = '0';
           setTimeout(() => {
             this.remove();
             next();
@@ -143,7 +145,7 @@ export class HolyProgress {
    * @param {number} max - The upper boundary of the output range.
    * @returns {number} The clamped value.
    */
-  private clamp = (n: number, min: number, max: number): number => {
+  private readonly clamp = (n: number, min: number, max: number): number => {
     if (n < min) return min;
     if (n > max) return max;
     return n;
@@ -156,8 +158,8 @@ export class HolyProgress {
    * @param {HTMLElement} obj - The HTML element to repaint.
    * @returns {HTMLElement} The same HTML element, for chaining.
    */
-  private repaint = (obj: HTMLElement): HTMLElement => {
-    obj.offsetWidth;
+  private readonly repaint = (obj: HTMLElement): HTMLElement => {
+    void obj.offsetWidth;
     return obj;
   };
 
@@ -168,7 +170,7 @@ export class HolyProgress {
    * @param {number} n - The progress value to convert.
    * @returns {number} The percentage representation of the progress value.
    */
-  private toBarPercentage = (n: number): number => {
+  private readonly toBarPercentage = (n: number): number => {
     return (-1 + n) * 100;
   };
 
@@ -179,7 +181,7 @@ export class HolyProgress {
    * @returns {HolyProgress} The current instance for chaining methods.
    */
   public start = (): HolyProgress => {
-    if (!this.status) {
+    if (this.status === null) {
       this.setTo(0);
     }
 
@@ -195,9 +197,9 @@ export class HolyProgress {
    * This function is recursive and continues to increment the progress at intervals defined by `trickleSpeed`.
    * @private
    */
-  private startTrickle = () => {
-    const run = () => {
-      if (!this.status) return;
+  private readonly startTrickle = (): void => {
+    const run = (): void => {
+      if (this.status === null) return;
 
       this.increment();
       setTimeout(run, this.settings.trickleSpeed);
@@ -214,7 +216,7 @@ export class HolyProgress {
    * @returns {HolyProgress} The current instance for chaining methods.
    */
   public done = (force?: boolean): HolyProgress => {
-    if (!force && !this.status) return this;
+    if (force === false && this.status === null) return this;
 
     return this.increment(0.3 + 0.5 * Math.random()).setTo(1);
   };
@@ -226,7 +228,7 @@ export class HolyProgress {
    * @param {number} status - The current progress status.
    * @returns {number} The calculated increment value.
    */
-  private calculateIncrement = (status: number): number => {
+  private readonly calculateIncrement = (status: number): number => {
     if (status < 0.2) return 0.1;
     if (status < 0.5) return 0.04;
     if (status < 0.8) return 0.02;
@@ -240,8 +242,8 @@ export class HolyProgress {
    * @param {number} [amount] - The amount to increment the progress bar.
    * @returns {HolyProgress} The current instance for chaining methods.
    */
-  private increment = (amount?: number): HolyProgress => {
-    if (!this.status) {
+  private readonly increment = (amount?: number): HolyProgress => {
+    if (this.status === null) {
       return this.start();
     }
 
@@ -249,7 +251,7 @@ export class HolyProgress {
       return this;
     }
 
-    if (typeof amount !== "number") {
+    if (typeof amount !== 'number') {
       amount = this.calculateIncrement(this.status);
     }
 
@@ -264,12 +266,12 @@ export class HolyProgress {
    * @private
    * @returns {Function} A function that accepts a callback to be queued.
    */
-  private queue = (() => {
-    const pending: ((next: () => void) => void)[] = [];
+  private readonly queue = (() => {
+    const pending: Array<(next: () => void) => void> = [];
 
-    const next = () => {
-      var fn = pending.shift();
-      if (fn) {
+    const next = (): void => {
+      const fn = pending.shift();
+      if (fn !== undefined) {
         fn(next);
       }
     };
@@ -285,31 +287,35 @@ export class HolyProgress {
    * It sets up the necessary styles and appends the element to the document body.
    * @private
    * @param {boolean} fromStart - Indicates if the bar is created from the start position.
-   * @returns {HTMLElement} The created progress bar element, or null if creation fails.
+   * @returns {HTMLElement | null} The created progress bar element, or null if creation fails.
    */
-  private createBar = (fromStart: boolean): HTMLElement => {
-    var progress = document.createElement("div");
-    progress.id = "holy-progress";
-    progress.style.pointerEvents = "none";
+  private readonly createBar = (fromStart: boolean): HTMLElement | null => {
+    const progress = document.createElement('div');
+    progress.id = 'holy-progress';
+    progress.style.pointerEvents = 'none';
     progress.innerHTML = '<div class="bar" role="bar"></div>';
 
-    const bar = progress.querySelector('[role="bar"]') as HTMLElement;
+    const bar = progress.querySelector('[role="bar"]');
 
-    this.bar = bar;
+    if (bar === null) {
+      return null;
+    }
+
+    this.bar = bar as HTMLElement;
 
     const percentage = fromStart
-      ? "-100"
-      : this.toBarPercentage(this.status || 0);
+      ? '-100'
+      : this.toBarPercentage(this.status ?? 0);
 
     this.bar.style.backgroundColor = this.settings.color;
-    this.bar.style.height = this.settings.height + "px";
+    this.bar.style.height = this.settings.height + 'px';
     this.bar.style.zIndex = this.settings.zIndex.toString();
-    this.bar.style.position = "fixed";
-    this.bar.style.width = "100%";
-    this.bar.style.top = "0";
-    this.bar.style.left = "0";
-    this.bar.style.transition = "all 0 linear";
-    this.bar.style.transform = "translate3d(" + percentage + "%,0,0)";
+    this.bar.style.position = 'fixed';
+    this.bar.style.width = '100%';
+    this.bar.style.top = '0';
+    this.bar.style.left = '0';
+    this.bar.style.transition = 'all 0 linear';
+    this.bar.style.transform = 'translate3d(' + percentage + '%,0,0)';
 
     document.body.appendChild(progress);
 
@@ -320,11 +326,13 @@ export class HolyProgress {
    * Retrieves the existing progress bar element from the DOM, or creates a new one if not present.
    * @private
    * @param {boolean} fromStart - Indicates if the bar should be retrieved/created from the start position.
-   * @returns {HTMLElement} The retrieved or newly created progress bar element.
+   * @returns {HTMLElement | null} The retrieved or newly created progress bar element.
    */
-  private getOrCreateBar = (fromStart: boolean): HTMLElement => {
-    const bar = document.getElementById("holy-progress");
-    if (bar) {
+  private readonly getOrCreateBar = (
+    fromStart: boolean,
+  ): HTMLElement | null => {
+    const bar = document.getElementById('holy-progress');
+    if (bar !== null) {
       return bar;
     }
 
@@ -336,9 +344,9 @@ export class HolyProgress {
    * This is typically called when the progress reaches 100% and is no longer needed.
    * @private
    */
-  private remove = () => {
-    const progress = document.getElementById("holy-progress");
-    progress && progress.remove();
+  private readonly remove = (): void => {
+    const progress = document.getElementById('holy-progress');
+    progress !== null && progress.remove();
   };
 
   /**
@@ -347,10 +355,10 @@ export class HolyProgress {
    * @private
    * @returns {TransformStrategy} - The optimal CSS positioning strategy ('translate3d', 'translate', or 'margin').
    */
-  private getTransformStrategy = (): TransformStrategy => {
+  private readonly getTransformStrategy = (): TransformStrategy => {
     const style = document.body.style;
-    const prefixes = ["Webkit", "Moz", "ms", "O", ""];
-    let transformProp = "";
+    const prefixes = ['Webkit', 'Moz', 'ms', 'O', ''];
+    let transformProp = '';
 
     for (let i = 0; i < prefixes.length; i++) {
       if (`${prefixes[i]}Transform` in style) {
@@ -359,12 +367,12 @@ export class HolyProgress {
       }
     }
 
-    if (transformProp !== "" && `${transformProp}Perspective` in style) {
-      return "translate3d";
-    } else if (transformProp !== "") {
-      return "translate";
+    if (transformProp !== '' && `${transformProp}Perspective` in style) {
+      return 'translate3d';
+    } else if (transformProp !== '') {
+      return 'translate';
     } else {
-      return "margin";
+      return 'margin';
     }
   };
 
@@ -375,14 +383,14 @@ export class HolyProgress {
    * @param {number} n - Position value of the bar, as a number between 0 and 1.
    * @returns {Object} - CSS styles for the progress bar.
    */
-  private barPositionCSS = (n: number): Record<string, string> => {
+  private readonly barPositionCSS = (n: number): Record<string, string> => {
     const transformStrategy = this.getTransformStrategy();
-    const barPosition = this.toBarPercentage(n) + "%";
+    const barPosition = this.toBarPercentage(n) + '%';
 
-    if (transformStrategy === "translate3d") {
+    if (transformStrategy === 'translate3d') {
       return { transform: `translate3d(${barPosition},0,0)` };
     }
-    if (transformStrategy === "translate") {
+    if (transformStrategy === 'translate') {
       return { transform: `translate(${barPosition},0)` };
     }
     return { marginLeft: barPosition };

@@ -1,0 +1,5 @@
+tsup.config.ts
+.eslintrc.js
+vitest.config.ts
+dist/
+node_modules/
