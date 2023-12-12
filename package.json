@@ -33,7 +33,6 @@
     "test": "vitest -c ./vitest.config.ts"
   },
   "dependencies": {
-    "nprogress": "^0.2.0",
     "react": "^18.2.0"
   },
   "files": [
@@ -50,7 +49,6 @@
     "url": "https://github.com/tomcru/holy-loader.git"
   },
   "devDependencies": {
-    "@types/nprogress": "^0.2.3",
     "@types/react": "^18.2.43",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "eslint": "^8.55.0",

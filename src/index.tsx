@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as NProgress from "nprogress";
+import { HolyProgress } from "./HolyProgress";
 import { DEFAULTS } from "./constants";
 
 export type HolyLoaderProps = {
@@ -19,7 +19,7 @@ export type HolyLoaderProps = {
    * Determines the delay speed for the incremental movement of the top-loading bar, in milliseconds.
    * Default: 200 milliseconds
    */
-  crawlSpeed?: number;
+  trickleSpeed?: number;
 
   /**
    * Defines the height of the top-loading bar in pixels.
@@ -31,7 +31,7 @@ export type HolyLoaderProps = {
    * Enables or disables the automatic incremental movement of the top-loading bar.
    * Default: true (enabled)
    */
-  crawl?: boolean;
+  trickle?: boolean;
 
   /**
    * Specifies the easing function to use for the loading animation. Accepts any valid CSS easing string.
@@ -59,7 +59,7 @@ export type HolyLoaderProps = {
  * @param {string} url - The URL to be converted. Can be an absolute or relative URL.
  * @returns {string} The absolute URL derived from the given URL and the current window location.
  */
-export const toAbsoluteURL = (url: string) => {
+export const toAbsoluteURL = (url: string): string => {
   return new URL(url, window.location.href).href;
 };
 
@@ -70,10 +70,26 @@ export const toAbsoluteURL = (url: string) => {
  * @param {string} newUrl The new URL to compare with the current URL.
  * @returns {boolean} True if the URLs refer to the same page (excluding the anchor), false otherwise.
  */
-export const isSamePageAnchor = (currentUrl: string, newUrl: string) => {
+export const isSamePageAnchor = (
+  currentUrl: string,
+  newUrl: string
+): boolean => {
   const current = new URL(toAbsoluteURL(currentUrl));
   const next = new URL(toAbsoluteURL(newUrl));
   return current.href.split("#")[0] === next.href.split("#")[0];
+};
+
+/**
+ * Determines if two URLs have the same origin.
+ *
+ * @param {string} currentUrl The current URL.
+ * @param {string} newUrl The new URL to compare with the current URL.
+ * @returns {boolean} True if the URLs have the same origin, false otherwise.
+ */
+export const isSameOrigin = (currentUrl: string, newUrl: string): boolean => {
+  const current = new URL(toAbsoluteURL(currentUrl));
+  const next = new URL(toAbsoluteURL(newUrl));
+  return current.origin === next.origin;
 };
 
 /**
@@ -86,39 +102,23 @@ export const isSamePageAnchor = (currentUrl: string, newUrl: string) => {
 const HolyLoader = ({
   color = DEFAULTS.color,
   initialPosition = DEFAULTS.initialPosition,
-  crawlSpeed = DEFAULTS.crawlSpeed,
+  trickleSpeed = DEFAULTS.trickleSpeed,
   height = DEFAULTS.height,
-  crawl = DEFAULTS.crawl,
+  trickle = DEFAULTS.trickle,
   easing = DEFAULTS.easing,
   speed = DEFAULTS.speed,
   zIndex = DEFAULTS.zIndex,
 }: HolyLoaderProps) => {
-  const styles = (
-    <style>
-      {`
-        #nprogress { pointer-events: none; }
-        #nprogress .bar {
-          background: ${color};
-          position: fixed;
-          z-index: ${zIndex};
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: ${height}px;
-        }
-      `}
-    </style>
-  );
-
   React.useEffect(() => {
-    NProgress.configure({
-      showSpinner: false,
-      trickle: crawl,
-      trickleSpeed: crawlSpeed,
-      minimum: initialPosition,
-      easing: easing,
-      speed: speed,
-      template: '<div class="bar" role="bar"><div class="peg"></div></div>',
+    const holyProgress = new HolyProgress({
+      color,
+      height,
+      trickleSpeed,
+      trickle,
+      initialPosition,
+      easing,
+      speed,
+      zIndex,
     });
 
     /**
@@ -136,6 +136,8 @@ const HolyLoader = ({
           anchor.target === "_blank" ||
           event.ctrlKey ||
           event.metaKey ||
+          // Skip if URL points to a different domain
+          !isSameOrigin(window.location.href, anchor.href) ||
           // Skip if URL is a same-page anchor (href="#", href="#top", etc.).
           isSamePageAnchor(window.location.href, anchor.href) ||
           // Skip if URL uses a non-http/https protocol (mailto:, tel:, etc.).
@@ -144,11 +146,11 @@ const HolyLoader = ({
           return;
         }
 
-        NProgress.start();
+        holyProgress.start();
         overridePushState();
       } catch (error) {
-        NProgress.start();
-        NProgress.done();
+        holyProgress.start();
+        holyProgress.done();
       }
     };
 
@@ -159,7 +161,7 @@ const HolyLoader = ({
     const overridePushState = () => {
       const originalPushState = history.pushState;
       history.pushState = (...args) => {
-        NProgress.done();
+        holyProgress.done();
         document.documentElement.classList.remove("nprogress-busy");
         originalPushState.apply(history, args);
       };
@@ -172,7 +174,7 @@ const HolyLoader = ({
     };
   }, []);
 
-  return styles;
+  return <></>;
 };
 
 export default HolyLoader;

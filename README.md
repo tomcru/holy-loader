@@ -69,13 +69,17 @@ export default function App({ Component, pageProps }) {
 ### Custom Configuration
 
 ```typescript
-import React from "react";
 import HolyLoader from "holy-loader";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <HolyLoader color="#ff4500" height={5} crawlSpeed={250} easing="linear" />
+      <HolyLoader
+        color="#ff4500"
+        height={5}
+        trickleSpeed={250}
+        easing="linear"
+      />
       {children}
     </html>
   );
@@ -99,9 +103,9 @@ Holy Loader accepts the following props for customization:
 
 - `color` (string): Specifies the color of the top-loading bar. Default: "#59a2ff" (a shade of blue).
 - `initialPosition` (number): Sets the initial position of the top-loading bar as a percentage of the total width. Default: 0.08 (8% of the total width).
-- `crawlSpeed` (number): Determines the delay speed for the incremental movement of the top-loading bar, in milliseconds. Default: 200 milliseconds.
+- `trickleSpeed` (number): Determines the delay speed for the incremental movement of the top-loading bar, in milliseconds. Default: 200 milliseconds.
 - `height` (number): Defines the height of the top-loading bar in pixels. Default: 4 pixels.
-- `crawl` (boolean): Enables or disables the automatic incremental movement of the top-loading bar. Default: true (enabled).
+- `trickle` (boolean): Enables or disables the automatic incremental movement of the top-loading bar. Default: true (enabled).
 - `easing` (string): Specifies the easing function to use for the loading animation. Accepts any valid CSS easing string. Default: "ease".
 - `speed` (number): Sets the animation speed of the top-loading bar in milliseconds. Default: 200 milliseconds.
 - `zIndex` (number): Defines the z-index property of the top-loading bar, controlling its stacking order. Default: 2147483647.
