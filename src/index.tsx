@@ -109,16 +109,31 @@ const HolyLoader = ({
   zIndex = DEFAULTS.zIndex,
 }: HolyLoaderProps): JSX.Element => {
   React.useEffect(() => {
-    const holyProgress = new HolyProgress({
-      color,
-      height,
-      trickleSpeed,
-      trickle,
-      initialPosition,
-      easing,
-      speed,
-      zIndex,
-    });
+    let holyProgress: HolyProgress;
+
+    const startProgress = (): void => {
+      try {
+        holyProgress.start();
+      } catch (error) {}
+    };
+
+    const stopProgress = (): void => {
+      try {
+        holyProgress.done();
+      } catch (error) {}
+    };
+
+    /**
+     * Overrides the history.pushState function to stop the NProgress bar
+     * when navigating to a new page without a full page reload.
+     */
+    const overridePushState = (): void => {
+      const originalPushState = history.pushState.bind(history);
+      history.pushState = (...args) => {
+        stopProgress();
+        originalPushState(...args);
+      };
+    };
 
     /**
      * Handles click events on anchor tags, starting the NProgress bar for page navigation.
@@ -126,7 +141,7 @@ const HolyLoader = ({
      *
      * @param {MouseEvent} event The mouse event triggered by clicking an anchor tag.
      */
-    const handleClick = (event: MouseEvent) => {
+    const handleClick = (event: MouseEvent): void => {
       try {
         const target = event.target as HTMLElement;
         const anchor = target.closest('a');
@@ -145,27 +160,27 @@ const HolyLoader = ({
           return;
         }
 
-        holyProgress.start();
+        startProgress();
         overridePushState();
       } catch (error) {
-        holyProgress.start();
-        holyProgress.done();
+        stopProgress();
       }
     };
 
-    /**
-     * Overrides the history.pushState function to stop the NProgress bar
-     * when navigating to a new page without a full page reload.
-     */
-    const overridePushState = (): void => {
-      const originalPushState = history.pushState.bind(history);
-      history.pushState = (...args) => {
-        holyProgress.done();
-        originalPushState(...args);
-      };
-    };
+    try {
+      holyProgress = new HolyProgress({
+        color,
+        height,
+        trickleSpeed,
+        trickle,
+        initialPosition,
+        easing,
+        speed,
+        zIndex,
+      });
 
-    document.addEventListener('click', handleClick);
+      document.addEventListener('click', handleClick);
+    } catch (error) {}
 
     return () => {
       document.removeEventListener('click', handleClick);
