@@ -22,10 +22,10 @@ export interface HolyLoaderProps {
   trickleSpeed?: number;
 
   /**
-   * Defines the height of the top-loading bar in pixels.
+   * Specifies the height of the top-loading bar in either pixels (number) or css unit (string).
    * Default: 4 pixels
    */
-  height?: number;
+  height?: number | string;
 
   /**
    * Enables or disables the automatic incremental movement of the top-loading bar.

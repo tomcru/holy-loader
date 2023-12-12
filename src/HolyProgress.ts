@@ -36,10 +36,10 @@ type HolyProgressProps = {
   color: string;
 
   /**
-   * Specifies the height of the progress bar in pixels.
+   * Specifies the height of the progress bar in either pixels (number) or css unit (string).
    * Default: 4
    */
-  height: number;
+  height: number | string;
 
   /**
    * Specifies the z-index of the progress bar.
@@ -307,8 +307,12 @@ export class HolyProgress {
       ? '-100'
       : this.toBarPercentage(this.status ?? 0);
 
-    this.bar.style.backgroundColor = this.settings.color;
-    this.bar.style.height = this.settings.height + 'px';
+    this.bar.style.background = this.settings.color;
+    if (typeof this.settings.height === 'number') {
+      this.bar.style.height = this.settings.height + 'px';
+    } else {
+      this.bar.style.height = this.settings.height;
+    }
     this.bar.style.zIndex = this.settings.zIndex.toString();
     this.bar.style.position = 'fixed';
     this.bar.style.width = '100%';
