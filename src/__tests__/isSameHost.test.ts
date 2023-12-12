@@ -19,6 +19,9 @@ describe('isSameHost', () => {
     expect(
       isSameHost('https://example.com/', 'http://example.com/contact'),
     ).toBe(true);
+    expect(
+      isSameHost('https://main.example.com:3000', 'https://main.example.com'),
+    ).toBe(true);
   });
 
   it('should return true for URLs with and without www', () => {
@@ -28,11 +31,26 @@ describe('isSameHost', () => {
     expect(
       isSameHost('http://www.example.com/about', 'http://example.com/about'),
     ).toBe(true);
+    expect(
+      isSameHost(
+        'https://www.main.example.com/contact',
+        'https://main.example.com',
+      ),
+    );
   });
 
   it('should return false for URLs with different hosts', () => {
     expect(
-      isSameHost('https://example.com', 'https://anotherexample.com'),
+      isSameHost(
+        'http://example.com',
+        'https://www.instagram.com/gamegatornet/',
+      ),
+    ).toBe(false);
+    expect(
+      isSameHost(
+        'http://main.example.com',
+        'https://www.instagram.com/gamegatornet/',
+      ),
     ).toBe(false);
     expect(
       isSameHost('http://subdomain.example.com', 'http://example.com'),
