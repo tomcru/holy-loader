@@ -109,5 +109,6 @@ Holy Loader accepts the following props for customization:
 - `easing` (string): Specifies the easing function to use for the loading animation. Accepts any valid CSS easing string. Default: "ease".
 - `speed` (number): Sets the animation speed of the top-loading bar in milliseconds. Default: 200 milliseconds.
 - `zIndex` (number): Defines the z-index property of the top-loading bar, controlling its stacking order. Default: 2147483647.
+- `boxShadow` (string): Sets the box-shadow property of the top-loading bar. Default: "none".
 
 Project inspired by [nextjs-toploader](https://github.com/TheSGJ/nextjs-toploader) & [nprogress](https://github.com/rstacruz/nprogress)

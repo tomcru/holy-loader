@@ -46,6 +46,12 @@ type HolyProgressProps = {
    * Default: 2147483647
    */
   zIndex: number;
+
+  /**
+   * Specifies the shadow effect to be applied to the progress bar.
+   * For example: "0 0 10px #59a2ff, 0 0 5px #59a2ff"
+   */
+  boxShadow?: string;
 };
 
 type TransformStrategy = 'translate3d' | 'translate' | 'margin';
@@ -76,6 +82,7 @@ export class HolyProgress {
       color: '#59a2ff',
       height: 4,
       zIndex: 2147483647,
+      boxShadow: undefined,
     };
 
     this.settings = { ...defaultSettings, ...customSettings };
@@ -320,6 +327,7 @@ export class HolyProgress {
     this.bar.style.left = '0';
     this.bar.style.transition = 'all 0 linear';
     this.bar.style.transform = 'translate3d(' + percentage + '%,0,0)';
+    this.bar.style.boxShadow = this.settings.boxShadow ?? '';
 
     document.body.appendChild(progress);
 

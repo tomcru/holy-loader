@@ -50,6 +50,12 @@ export interface HolyLoaderProps {
    * Default: 2147483647
    */
   zIndex?: number;
+
+  /**
+   * Specifies the shadow effect to be applied to the top-loading bar.
+   * For example: "0 0 10px #59a2ff, 0 0 5px #59a2ff"
+   */
+  boxShadow?: string;
 }
 
 /**
@@ -110,6 +116,7 @@ const HolyLoader = ({
   easing = DEFAULTS.easing,
   speed = DEFAULTS.speed,
   zIndex = DEFAULTS.zIndex,
+  boxShadow,
 }: HolyLoaderProps): JSX.Element => {
   React.useEffect(() => {
     let holyProgress: HolyProgress;
@@ -180,6 +187,7 @@ const HolyLoader = ({
         easing,
         speed,
         zIndex,
+        boxShadow,
       });
 
       document.addEventListener('click', handleClick);
