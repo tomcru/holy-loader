@@ -7,8 +7,6 @@
 
 > Holy Loader is a lightweight and customizable top-loading progress bar component, specifically designed for React applications and optimized for Next.js with app router.
 
-⚠️ Next.js 14.0.3 added experimental support for history.pushState and history.replaceState, breaking Holy Loader. It has been fixed in Next.js 14.0.4: https://github.com/vercel/next.js/pull/58861
-
 Want to see it in use? Visit: [GameGator](https://main.gamegator.net).
 
 Also check out [Holy Time](https://github.com/badosz0/holy-time), yet another (type-safe) date time library.
