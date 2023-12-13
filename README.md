@@ -104,11 +104,11 @@ Holy Loader accepts the following props for customization:
 - `color` (string): Specifies the color of the top-loading bar. Default: "#59a2ff" (a shade of blue).
 - `initialPosition` (number): Sets the initial position of the top-loading bar as a percentage of the total width. Default: 0.08 (8% of the total width).
 - `trickleSpeed` (number): Determines the delay speed for the incremental movement of the top-loading bar, in milliseconds. Default: 200 milliseconds.
-- `height` (number): Defines the height of the top-loading bar in pixels or css unit. Default: 4 pixels.
+- `height` (number | string): Defines the height of the top-loading bar in pixels or css unit. Default: 4 pixels.
 - `trickle` (boolean): Enables or disables the automatic incremental movement of the top-loading bar. Default: true (enabled).
 - `easing` (string): Specifies the easing function to use for the loading animation. Accepts any valid CSS easing string. Default: "ease".
 - `speed` (number): Sets the animation speed of the top-loading bar in milliseconds. Default: 200 milliseconds.
 - `zIndex` (number): Defines the z-index property of the top-loading bar, controlling its stacking order. Default: 2147483647.
-- `boxShadow` (string): Sets the box-shadow property of the top-loading bar. Default: "none".
+- `boxShadow` (string): Sets the box-shadow property of the top-loading bar. Turned off by default.
 
 Project inspired by [nextjs-toploader](https://github.com/TheSGJ/nextjs-toploader) & [nprogress](https://github.com/rstacruz/nprogress)
