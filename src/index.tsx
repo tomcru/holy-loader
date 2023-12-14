@@ -1,5 +1,7 @@
+'use client';
+
 import * as React from 'react';
-import { HolyProgress } from './HolyProgress';
+import { useHolyProgress } from './HolyProgress';
 import { DEFAULTS } from './constants';
 
 export interface HolyLoaderProps {
@@ -117,36 +119,25 @@ const HolyLoader = ({
   speed = DEFAULTS.speed,
   zIndex = DEFAULTS.zIndex,
   boxShadow,
-}: HolyLoaderProps): JSX.Element => {
+}: HolyLoaderProps): JSX.Element | null => {
+  const { start, stop, HolyProgress } = useHolyProgress();
+
   React.useEffect(() => {
-    let holyProgress: HolyProgress;
-
-    const startProgress = (): void => {
-      try {
-        holyProgress.start();
-      } catch (error) {}
-    };
-
-    const stopProgress = (): void => {
-      try {
-        holyProgress.done();
-      } catch (error) {}
-    };
-
     /**
-     * Overrides the history.pushState function to stop the NProgress bar
+     * Overrides the history.pushState function to stop the progress bar
      * when navigating to a new page without a full page reload.
      */
     const overridePushState = (): void => {
       const originalPushState = history.pushState.bind(history);
       history.pushState = (...args) => {
-        stopProgress();
         originalPushState(...args);
+
+        stop();
       };
     };
 
     /**
-     * Handles click events on anchor tags, starting the NProgress bar for page navigation.
+     * Handles click events on anchor tags, starting the progress bar for page navigation.
      * It checks for various conditions to decide whether to start the progress bar or not.
      *
      * @param {MouseEvent} event The mouse event triggered by clicking an anchor tag.
@@ -170,26 +161,12 @@ const HolyLoader = ({
           return;
         }
 
-        startProgress();
+        start();
         overridePushState();
-      } catch (error) {
-        stopProgress();
-      }
+      } catch (error) {}
     };
 
     try {
-      holyProgress = new HolyProgress({
-        color,
-        height,
-        trickleSpeed,
-        trickle,
-        initialPosition,
-        easing,
-        speed,
-        zIndex,
-        boxShadow,
-      });
-
       document.addEventListener('click', handleClick);
     } catch (error) {}
 
@@ -198,7 +175,21 @@ const HolyLoader = ({
     };
   }, []);
 
-  return <></>;
+  return (
+    <HolyProgress
+      easing={easing}
+      trickle={trickle}
+      trickleSpeed={trickleSpeed}
+      initialPosition={initialPosition}
+      speed={speed}
+      style={{
+        background: color,
+        height: typeof height === 'number' ? `${height}px` : height,
+        boxShadow,
+        zIndex,
+      }}
+    />
+  );
 };
 
 export default HolyLoader;
