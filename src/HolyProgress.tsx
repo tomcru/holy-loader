@@ -191,6 +191,13 @@ const HolyProgressComponent = forwardRef<
         setTimeout(() => {
           cancelAnimationFrame(requestRef.current);
 
+          /**
+           * this uses direct DOM manipulation instead of React state,
+           * as the HolyProgress component can get mounted/unmounted on page transition,
+           * causing progressRef.current to be null.
+           *
+           * TODO: it could be replaced by a css animation, which then requires a style sheet
+           */
           const holyProgress = document.getElementById('holy-progress');
           if (holyProgress !== null) {
             holyProgress.style.opacity = '0';
