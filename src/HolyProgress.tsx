@@ -155,7 +155,7 @@ const HolyProgressComponent = forwardRef<
     /**
      * The useImperativeHandle hook is used to customize the instance value
      * that is exposed to parent components when using ref. This allows the parent
-     * components to invoke the 'start' and 'end' methods on the HolyProgressComponent.
+     * components to invoke the methods on the HolyProgressComponent.
      */
     useImperativeHandle(ref, () => ({
       set: (progress: number) => {
