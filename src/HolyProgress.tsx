@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { useRef, useImperativeHandle, forwardRef, useEffect } from 'react';
+import { useRef, useImperativeHandle, forwardRef } from 'react';
 import { DEFAULTS } from './constants';
 
 type _HolyProgressHandle = {
   start: () => void;
   end: () => void;
+  set: (progress: number) => void;
 };
 
 /**
@@ -15,6 +16,7 @@ type _HolyProgressHandle = {
 export const useHolyProgress = (): {
   start: () => void;
   end: () => void;
+  set: (progress: number) => void;
   HolyProgress: React.ForwardRefExoticComponent<
     HolyProgressProps & React.RefAttributes<_HolyProgressHandle>
   >;
@@ -22,15 +24,18 @@ export const useHolyProgress = (): {
   const ref = useRef<_HolyProgressHandle>(null);
 
   // eslint-disable-next-line react/display-name
-  const HolyProgress = React.forwardRef<_HolyProgressHandle, HolyProgressProps>(
-    (props, forwardedRef) => {
-      return <HolyProgressComponent ref={forwardedRef ?? ref} {...props} />;
-    },
+  const HolyProgress = React.memo(
+    React.forwardRef<_HolyProgressHandle, HolyProgressProps>(
+      (props, forwardedRef) => {
+        return <HolyProgressComponent ref={forwardedRef ?? ref} {...props} />;
+      },
+    ),
   );
 
   return {
     start: () => ref.current?.start(),
     end: () => ref.current?.end(),
+    set: (progress: number) => ref.current?.set(progress),
     HolyProgress,
   };
 };
@@ -153,6 +158,13 @@ const HolyProgressComponent = forwardRef<
      * components to invoke the 'start' and 'end' methods on the HolyProgressComponent.
      */
     useImperativeHandle(ref, () => ({
+      set: (progress: number) => {
+        if (progressRef.current === null) {
+          return;
+        }
+        progressRef.current.dataset.progress = String(progress);
+        setProgress(progress);
+      },
       start: () => {
         if (progressRef.current === null) {
           return;
@@ -171,34 +183,21 @@ const HolyProgressComponent = forwardRef<
         if (progressRef.current === null || requestRef.current === null) {
           return;
         }
-        progressRef.current.dataset.progress = '1';
-        setProgress(1);
-        cancelAnimationFrame(requestRef.current);
+        progressRef.current.dataset.progress = '0.999';
+        setProgress(0.999);
+
+        repaint(progressRef.current);
 
         setTimeout(() => {
           cancelAnimationFrame(requestRef.current);
 
-          if (progressRef.current !== null) {
-            progressRef.current.style.opacity = '0';
+          const holyProgress = document.getElementById('holy-progress');
+          if (holyProgress !== null) {
+            holyProgress.style.opacity = '0';
           }
         }, speed);
       },
     }));
-
-    useEffect(() => {
-      if (progressRef.current === null) {
-        return;
-      }
-
-      progressRef.current.dataset.progress = '0';
-      setProgress(0);
-
-      return () => {
-        if (requestRef.current !== null) {
-          cancelAnimationFrame(requestRef.current);
-        }
-      };
-    }, []);
 
     const barStyle = {
       position: 'fixed' as 'fixed',
@@ -213,7 +212,7 @@ const HolyProgressComponent = forwardRef<
       ...style,
     };
 
-    return <div ref={progressRef} style={barStyle} />;
+    return <div ref={progressRef} style={barStyle} id="holy-progress" />;
   },
 );
 

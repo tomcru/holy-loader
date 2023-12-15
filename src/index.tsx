@@ -106,10 +106,12 @@ const HolyLoader = ({
   zIndex = DEFAULTS.zIndex,
   boxShadow,
 }: HolyLoaderProps): JSX.Element | null => {
-  const { start, end, HolyProgress } = useHolyProgress();
+  const { start, end, set, HolyProgress } = useHolyProgress();
 
   React.useEffect(() => {
-    /**
+    set(0);
+
+    /*
      * Overrides the history.pushState function to stop the progress bar
      * when navigating to a new page without a full page reload.
      */
