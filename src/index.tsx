@@ -1,5 +1,7 @@
+'use client';
+
 import * as React from 'react';
-import { HolyProgress } from './HolyProgress';
+import { useHolyProgress } from './HolyProgress';
 import { DEFAULTS } from './constants';
 
 export interface HolyLoaderProps {
@@ -16,22 +18,10 @@ export interface HolyLoaderProps {
   initialPosition?: number;
 
   /**
-   * Determines the delay speed for the incremental movement of the top-loading bar, in milliseconds.
-   * Default: 200 milliseconds
-   */
-  trickleSpeed?: number;
-
-  /**
    * Specifies the height of the top-loading bar in either pixels (number) or css unit (string).
    * Default: 4 pixels
    */
   height?: number | string;
-
-  /**
-   * Enables or disables the automatic incremental movement of the top-loading bar.
-   * Default: true (enabled)
-   */
-  trickle?: boolean;
 
   /**
    * Specifies the easing function to use for the loading animation. Accepts any valid CSS easing string.
@@ -110,43 +100,32 @@ export const isSameHost = (currentUrl: string, newUrl: string): boolean => {
 const HolyLoader = ({
   color = DEFAULTS.color,
   initialPosition = DEFAULTS.initialPosition,
-  trickleSpeed = DEFAULTS.trickleSpeed,
   height = DEFAULTS.height,
-  trickle = DEFAULTS.trickle,
   easing = DEFAULTS.easing,
   speed = DEFAULTS.speed,
   zIndex = DEFAULTS.zIndex,
   boxShadow,
-}: HolyLoaderProps): JSX.Element => {
+}: HolyLoaderProps): JSX.Element | null => {
+  const { start, end, set, HolyProgress } = useHolyProgress();
+
   React.useEffect(() => {
-    let holyProgress: HolyProgress;
+    set(0);
 
-    const startProgress = (): void => {
-      try {
-        holyProgress.start();
-      } catch (error) {}
-    };
-
-    const stopProgress = (): void => {
-      try {
-        holyProgress.done();
-      } catch (error) {}
-    };
-
-    /**
-     * Overrides the history.pushState function to stop the NProgress bar
+    /*
+     * Overrides the history.pushState function to stop the progress bar
      * when navigating to a new page without a full page reload.
      */
     const overridePushState = (): void => {
       const originalPushState = history.pushState.bind(history);
       history.pushState = (...args) => {
-        stopProgress();
         originalPushState(...args);
+
+        end();
       };
     };
 
     /**
-     * Handles click events on anchor tags, starting the NProgress bar for page navigation.
+     * Handles click events on anchor tags, starting the progress bar for page navigation.
      * It checks for various conditions to decide whether to start the progress bar or not.
      *
      * @param {MouseEvent} event The mouse event triggered by clicking an anchor tag.
@@ -170,26 +149,12 @@ const HolyLoader = ({
           return;
         }
 
-        startProgress();
+        start();
         overridePushState();
-      } catch (error) {
-        stopProgress();
-      }
+      } catch (error) {}
     };
 
     try {
-      holyProgress = new HolyProgress({
-        color,
-        height,
-        trickleSpeed,
-        trickle,
-        initialPosition,
-        easing,
-        speed,
-        zIndex,
-        boxShadow,
-      });
-
       document.addEventListener('click', handleClick);
     } catch (error) {}
 
@@ -198,7 +163,19 @@ const HolyLoader = ({
     };
   }, []);
 
-  return <></>;
+  return (
+    <HolyProgress
+      easing={easing}
+      initialPosition={initialPosition}
+      speed={speed}
+      style={{
+        background: color,
+        height: typeof height === 'number' ? `${height}px` : height,
+        boxShadow,
+        zIndex,
+      }}
+    />
+  );
 };
 
 export default HolyLoader;
