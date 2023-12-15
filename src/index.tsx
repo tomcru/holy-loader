@@ -18,22 +18,10 @@ export interface HolyLoaderProps {
   initialPosition?: number;
 
   /**
-   * Determines the delay speed for the incremental movement of the top-loading bar, in milliseconds.
-   * Default: 200 milliseconds
-   */
-  trickleSpeed?: number;
-
-  /**
    * Specifies the height of the top-loading bar in either pixels (number) or css unit (string).
    * Default: 4 pixels
    */
   height?: number | string;
-
-  /**
-   * Enables or disables the automatic incremental movement of the top-loading bar.
-   * Default: true (enabled)
-   */
-  trickle?: boolean;
 
   /**
    * Specifies the easing function to use for the loading animation. Accepts any valid CSS easing string.
@@ -112,15 +100,13 @@ export const isSameHost = (currentUrl: string, newUrl: string): boolean => {
 const HolyLoader = ({
   color = DEFAULTS.color,
   initialPosition = DEFAULTS.initialPosition,
-  trickleSpeed = DEFAULTS.trickleSpeed,
   height = DEFAULTS.height,
-  trickle = DEFAULTS.trickle,
   easing = DEFAULTS.easing,
   speed = DEFAULTS.speed,
   zIndex = DEFAULTS.zIndex,
   boxShadow,
 }: HolyLoaderProps): JSX.Element | null => {
-  const { start, stop, HolyProgress } = useHolyProgress();
+  const { start, end, HolyProgress } = useHolyProgress();
 
   React.useEffect(() => {
     /**
@@ -132,7 +118,7 @@ const HolyLoader = ({
       history.pushState = (...args) => {
         originalPushState(...args);
 
-        stop();
+        end();
       };
     };
 
@@ -178,8 +164,6 @@ const HolyLoader = ({
   return (
     <HolyProgress
       easing={easing}
-      trickle={trickle}
-      trickleSpeed={trickleSpeed}
       initialPosition={initialPosition}
       speed={speed}
       style={{
