@@ -32,9 +32,6 @@
     "format:fix": "prettier --ignore-path .gitignore --write \"src/**/*.{ts,tsx}\"",
     "test": "vitest -c ./vitest.config.ts"
   },
-  "dependencies": {
-    "react": "^18.2.0"
-  },
   "files": [
     "dist/**/*.js*",
     "dist/**/*.mjs*",
@@ -53,6 +50,9 @@
     "email": "hello@tomrumpf.com",
     "url": "https://github.com/tomcru"
   },
+  "peerDependencies": {
+    "react": ">= 16.0.0"
+  },
   "devDependencies": {
     "@types/react": "^18.2.43",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
@@ -65,6 +65,7 @@
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
+    "react": "^18.2.0",
     "prettier": "^3.1.1",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
