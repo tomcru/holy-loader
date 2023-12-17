@@ -95,7 +95,7 @@ export const isSameHost = (currentUrl: string, newUrl: string): boolean => {
  * HolyLoader is a React component that provides a customizable top-loading progress bar.
  *
  * @param {HolyLoaderProps} props The properties for configuring the HolyLoader.
- * @returns {JSX.Element} The styles element to be rendered.
+ * @returns {null}
  */
 const HolyLoader = ({
   color = DEFAULTS.color,
@@ -105,7 +105,7 @@ const HolyLoader = ({
   speed = DEFAULTS.speed,
   zIndex = DEFAULTS.zIndex,
   boxShadow,
-}: HolyLoaderProps): JSX.Element => {
+}: HolyLoaderProps): null => {
   React.useEffect(() => {
     let holyProgress: HolyProgress;
 
@@ -184,7 +184,7 @@ const HolyLoader = ({
     };
   }, []);
 
-  return <></>;
+  return null;
 };
 
 export default HolyLoader;
