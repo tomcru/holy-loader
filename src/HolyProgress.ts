@@ -18,18 +18,6 @@ type HolyProgressProps = {
   speed: number;
 
   /**
-   * Specifies if the bar should increment automatically.
-   * Default: true
-   */
-  trickle: boolean;
-
-  /**
-   * Specifies the speed of the automatic incrementation.
-   * Default: 200
-   */
-  trickleSpeed: number;
-
-  /**
    * Specifies the color of the progress bar.
    * Default: '#59a2ff'
    */
@@ -77,8 +65,6 @@ export class HolyProgress {
       initialPosition: 0.08,
       easing: 'linear',
       speed: 200,
-      trickle: true,
-      trickleSpeed: 200,
       color: '#59a2ff',
       height: 4,
       zIndex: 2147483647,
@@ -192,16 +178,14 @@ export class HolyProgress {
       this.setTo(0);
     }
 
-    if (this.settings.trickle) {
-      this.startTrickle();
-    }
+    this.startTrickle();
 
     return this;
   };
 
   /**
    * Performs automatic incrementation of the progress bar.
-   * This function is recursive and continues to increment the progress at intervals defined by `trickleSpeed`.
+   * This function is recursive and continues to increment the progress at intervals defined by `sppeed`.
    * @private
    */
   private readonly startTrickle = (): void => {
@@ -209,10 +193,10 @@ export class HolyProgress {
       if (this.status === null) return;
 
       this.increment();
-      setTimeout(run, this.settings.trickleSpeed);
+      setTimeout(run, this.settings.speed);
     };
 
-    setTimeout(run, this.settings.trickleSpeed);
+    setTimeout(run, this.settings.speed);
   };
 
   /**

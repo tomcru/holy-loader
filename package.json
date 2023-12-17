@@ -1,6 +1,6 @@
 {
   "name": "holy-loader",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Holy Loader is a lightweight, customizable top-loading progress bar component for React applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,7 +27,7 @@
     "single-page-application"
   ],
   "scripts": {
-    "build": "tsup && sed -i '' '1s/^/\"use client\";/' dist/index.js",
+    "build": "tsup",
     "lint:fix": "eslint --ignore-path .eslintignore --fix --ext .js,.ts . && npm run format:fix",
     "format:fix": "prettier --ignore-path .gitignore --write \"src/**/*.{ts,tsx}\"",
     "test": "vitest -c ./vitest.config.ts"
