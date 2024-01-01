@@ -7,7 +7,7 @@
 
 > Holy Loader is a lightweight and customizable top-loading progress bar component, specifically designed for React applications and optimized for Next.js with app router.
 
-Want to see it in use? Visit: [GameGator](https://main.gamegator.net).
+Want to see it in use? Visit: [GameGator](https://gamegator.net).
 
 Also check out [Holy Time](https://github.com/badosz0/holy-time), yet another (type-safe) date time library.
 
