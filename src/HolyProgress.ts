@@ -336,6 +336,11 @@ export class HolyProgress {
    * @returns {void}
    */
   private readonly createSpinner = (): void => {
+    /** only createSpinner if it doesn't exist */
+    if (document.getElementById('holy-progress-spinner') !== null) {
+      return;
+    }
+
     const spinner = document.createElement('div');
     spinner.id = 'holy-progress-spinner';
     spinner.style.pointerEvents = 'none';
