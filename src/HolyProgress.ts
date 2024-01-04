@@ -1,3 +1,5 @@
+import { DEFAULTS } from './constants';
+
 type HolyProgressProps = {
   /**
    * Specifies the minimum value for the progress bar to start at.
@@ -40,6 +42,12 @@ type HolyProgressProps = {
    * For example: "0 0 10px #59a2ff, 0 0 5px #59a2ff"
    */
   boxShadow?: string;
+
+  /**
+   * Specifies whether to accompany the loading bar with a spinner.
+   * Default: false
+   */
+  showSpinner?: boolean;
 };
 
 type TransformStrategy = 'translate3d' | 'translate' | 'margin';
@@ -69,6 +77,7 @@ export class HolyProgress {
       height: 4,
       zIndex: 2147483647,
       boxShadow: undefined,
+      showSpinner: false,
     };
 
     this.settings = { ...defaultSettings, ...customSettings };
@@ -119,9 +128,10 @@ export class HolyProgress {
           progress.style.transition = 'all ' + speed + 'ms linear';
           progress.style.opacity = '0';
           setTimeout(() => {
-            this.remove();
+            this.removeBar();
             next();
           }, speed);
+          // this.removeSpinner();
         }, speed);
       } else {
         setTimeout(next, speed);
@@ -179,6 +189,7 @@ export class HolyProgress {
     }
 
     this.startTrickle();
+    this.createSpinner();
 
     return this;
   };
@@ -319,6 +330,47 @@ export class HolyProgress {
   };
 
   /**
+   * Creates and initializes a new spinner element in the DOM.
+   * It sets up the necessary styles and appends the element to the document body.
+   * @private
+   * @returns {void}
+   */
+  private readonly createSpinner = (): void => {
+    const spinner = document.createElement('div');
+    spinner.id = 'holy-progress-spinner';
+    spinner.style.pointerEvents = 'none';
+
+    spinner.style.display = 'block';
+    spinner.style.position = 'fixed';
+    spinner.style.zIndex = this.settings.zIndex.toString();
+    spinner.style.top = '15px';
+    spinner.style.right = '15px';
+
+    spinner.style.width = '18px';
+    spinner.style.height = '18px';
+    spinner.style.boxSizing = 'border-box';
+
+    spinner.style.border = 'solid 2px transparent';
+    spinner.style.borderTopColor = DEFAULTS.color;
+    spinner.style.borderLeftColor = DEFAULTS.color;
+    spinner.style.borderRadius = '50%';
+    spinner.style.animation = 'holy-progress-spinner 400ms linear infinite';
+
+    const keyframes = `
+      @keyframes holy-progress-spinner {
+        0%   { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+
+    const style = document.createElement('style');
+    style.innerHTML = keyframes;
+    spinner.appendChild(style);
+
+    document.body.appendChild(spinner);
+  };
+
+  /**
    * Retrieves the existing progress bar element from the DOM, or creates a new one if not present.
    * @private
    * @param {boolean} fromStart - Indicates if the bar should be retrieved/created from the start position.
@@ -337,12 +389,22 @@ export class HolyProgress {
 
   /**
    * Removes the progress bar element from the DOM.
-   * This is typically called when the progress reaches 100% and is no longer needed.
    * @private
+   * @returns {void}
    */
-  private readonly remove = (): void => {
-    const progress = document.getElementById('holy-progress');
-    progress !== null && progress.remove();
+  private readonly removeBar = (): void => {
+    const bar = document.getElementById('holy-progress');
+    bar !== null && bar.remove();
+  };
+
+  /**
+   * Removes the spinner element from the DOM.
+   * @private
+   * @returns {void}
+   */
+  private readonly removeSpinner = (): void => {
+    const spinner = document.getElementById('holy-progress-spinner');
+    spinner !== null && spinner.remove();
   };
 
   /**

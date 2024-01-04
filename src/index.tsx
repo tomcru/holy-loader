@@ -46,6 +46,12 @@ export interface HolyLoaderProps {
    * For example: "0 0 10px #59a2ff, 0 0 5px #59a2ff"
    */
   boxShadow?: string;
+
+  /**
+   * Specifies whether to accompany the loading bar with a spinner.
+   * Default: false
+   */
+  showSpinner?: boolean;
 }
 
 /**
@@ -105,6 +111,7 @@ const HolyLoader = ({
   speed = DEFAULTS.speed,
   zIndex = DEFAULTS.zIndex,
   boxShadow,
+  showSpinner = DEFAULTS.showSpinner,
 }: HolyLoaderProps): null => {
   React.useEffect(() => {
     let holyProgress: HolyProgress;
@@ -174,6 +181,7 @@ const HolyLoader = ({
         speed,
         zIndex,
         boxShadow,
+        showSpinner,
       });
 
       document.addEventListener('click', handleClick);

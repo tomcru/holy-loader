@@ -5,4 +5,5 @@ export const DEFAULTS = {
   easing: 'ease',
   speed: 200,
   zIndex: 2147483647,
+  showSpinner: false,
 };
