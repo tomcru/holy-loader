@@ -73,7 +73,7 @@ export class HolyProgress {
       initialPosition: 0.08,
       easing: 'linear',
       speed: 200,
-      color: '#59a2ff',
+      color: DEFAULTS.color,
       height: 4,
       zIndex: 2147483647,
       boxShadow: undefined,
@@ -131,7 +131,7 @@ export class HolyProgress {
             this.removeBar();
             next();
           }, speed);
-          // this.removeSpinner();
+          this.removeSpinner();
         }, speed);
       } else {
         setTimeout(next, speed);
@@ -352,7 +352,7 @@ export class HolyProgress {
 
     spinner.style.border = 'solid 2px transparent';
     spinner.style.borderTopColor = DEFAULTS.color;
-    spinner.style.borderLeftColor = DEFAULTS.color;
+    spinner.style.borderLeftColor = this.settings.color;
     spinner.style.borderRadius = '50%';
     spinner.style.animation = 'holy-progress-spinner 400ms linear infinite';
 
