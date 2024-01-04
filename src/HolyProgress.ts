@@ -351,7 +351,7 @@ export class HolyProgress {
     spinner.style.boxSizing = 'border-box';
 
     spinner.style.border = 'solid 2px transparent';
-    spinner.style.borderTopColor = DEFAULTS.color;
+    spinner.style.borderTopColor = this.settings.color;
     spinner.style.borderLeftColor = this.settings.color;
     spinner.style.borderRadius = '50%';
     spinner.style.animation = 'holy-progress-spinner 400ms linear infinite';
