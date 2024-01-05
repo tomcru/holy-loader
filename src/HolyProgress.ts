@@ -131,7 +131,10 @@ export class HolyProgress {
             this.removeBar();
             next();
           }, speed);
-          this.removeSpinner();
+
+          if (this.settings.showSpinner === true) {
+            this.removeSpinner();
+          }
         }, speed);
       } else {
         setTimeout(next, speed);
@@ -189,7 +192,10 @@ export class HolyProgress {
     }
 
     this.startTrickle();
-    this.createSpinner();
+
+    if (this.settings.showSpinner === true) {
+      this.createSpinner();
+    }
 
     return this;
   };
