@@ -132,9 +132,7 @@ export class HolyProgress {
             next();
           }, speed);
 
-          if (this.settings.showSpinner === true) {
-            this.removeSpinner();
-          }
+          this.removeSpinner();
         }, speed);
       } else {
         setTimeout(next, speed);
