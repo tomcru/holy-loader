@@ -129,14 +129,21 @@ const HolyLoader = ({
     };
 
     /**
-     * Overrides the history.pushState function to stop the progress bar
-     * when navigating to a new page without a full page reload.
+     * Enhances browser history methods (pushState and replaceState) to ensure that the
+     * progress indicator is appropriately halted when navigating through single-page applications
      */
-    const overridePushState = (): void => {
+    const stopProgressOnHistoryUpdate = (): void => {
       const originalPushState = history.pushState.bind(history);
       history.pushState = (...args) => {
         stopProgress();
         originalPushState(...args);
+      };
+
+      // This is crucial for Next.js Link components using the 'replace' prop.
+      const originalReplaceState = history.replaceState.bind(history);
+      history.replaceState = (...args) => {
+        stopProgress();
+        originalReplaceState(...args);
       };
     };
 
@@ -166,7 +173,7 @@ const HolyLoader = ({
         }
 
         startProgress();
-        overridePushState();
+        stopProgressOnHistoryUpdate();
       } catch (error) {
         stopProgress();
       }
