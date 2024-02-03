@@ -215,17 +215,11 @@ export class HolyProgress {
   };
 
   /**
-   * Completes the progress, moving it to 100% and then hiding it.
-   * Optionally, it can force completion even if the bar hasn't started.
+   * Completes the progress, moving it to 100%
    * @public
-   * @param {boolean} [force] - Force completion even if the bar hasn't started.
    * @returns {HolyProgress} The current instance for chaining methods.
    */
-  public done = (force?: boolean): HolyProgress => {
-    if (force === false && this.status === null) return this;
-
-    return this.increment(0.3 + 0.5 * Math.random()).setTo(1);
-  };
+  public complete = (): HolyProgress => this.setTo(1);
 
   /**
    * Calculates an increment value based on the current status of the progress.
@@ -235,11 +229,9 @@ export class HolyProgress {
    * @returns {number} The calculated increment value.
    */
   private readonly calculateIncrement = (status: number): number => {
-    if (status < 0.2) return 0.1;
-    if (status < 0.5) return 0.04;
-    if (status < 0.8) return 0.02;
-    if (status < 0.99) return 0.005;
-    return 0;
+    const base = 0.1;
+    const scale = 5;
+    return base * Math.exp(-scale * status);
   };
 
   /**

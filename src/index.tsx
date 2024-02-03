@@ -124,7 +124,7 @@ const HolyLoader = ({
 
     const stopProgress = (): void => {
       try {
-        holyProgress.done();
+        holyProgress.complete();
       } catch (error) {}
     };
 
