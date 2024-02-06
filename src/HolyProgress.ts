@@ -48,6 +48,12 @@ type HolyProgressProps = {
    * Default: false
    */
   showSpinner?: boolean;
+
+  /**
+   * Specifies the class attribute value.
+   * Default: undefined
+   */
+  className?: string;
 };
 
 type TransformStrategy = 'translate3d' | 'translate' | 'margin';
@@ -78,6 +84,7 @@ export class HolyProgress {
       zIndex: 2147483647,
       boxShadow: undefined,
       showSpinner: false,
+      className: undefined,
     };
 
     this.settings = { ...defaultSettings, ...customSettings };
@@ -320,6 +327,11 @@ export class HolyProgress {
     this.bar.style.transform = 'translate3d(' + percentage + '%,0,0)';
     this.bar.style.boxShadow = this.settings.boxShadow ?? '';
 
+    if (this.settings.className) {
+      this.bar.className = this.settings.className;
+      this.bar.style.removeProperty('background');
+    }
+    
     document.body.appendChild(progress);
 
     return progress;

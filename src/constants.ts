@@ -6,4 +6,5 @@ export const DEFAULTS = {
   speed: 200,
   zIndex: 2147483647,
   showSpinner: false,
+  className: undefined,
 };
