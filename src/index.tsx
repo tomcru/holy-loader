@@ -147,14 +147,14 @@ const HolyLoader = ({
       const originalPushState = history.pushState.bind(history);
       history.pushState = (...args) => {
         stopProgress();
-        originalPushState.apply(history, args);
+        originalPushState(...args);
       };
 
       // This is crucial for Next.js Link components using the 'replace' prop.
       const originalReplaceState = history.replaceState.bind(history);
       history.replaceState = (...args) => {
         stopProgress();
-        originalReplaceState.apply(history, args);
+        originalReplaceState(...args);
       };
 
       isHistoryPatched = true;
