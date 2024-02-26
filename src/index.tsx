@@ -129,22 +129,35 @@ const HolyLoader = ({
     };
 
     /**
+     * Flag to prevent redundant patching of History API methods.
+     * This is essential to avoid pushState & replaceState increasingly nesting
+     * withing patched versions of itself
+     */
+    let isHistoryPatched = false;
+
+    /**
      * Enhances browser history methods (pushState and replaceState) to ensure that the
      * progress indicator is appropriately halted when navigating through single-page applications
      */
     const stopProgressOnHistoryUpdate = (): void => {
+      if (isHistoryPatched) {
+        return;
+      }
+
       const originalPushState = history.pushState.bind(history);
       history.pushState = (...args) => {
         stopProgress();
-        originalPushState(...args);
+        originalPushState.apply(history, args);
       };
 
       // This is crucial for Next.js Link components using the 'replace' prop.
       const originalReplaceState = history.replaceState.bind(history);
       history.replaceState = (...args) => {
         stopProgress();
-        originalReplaceState(...args);
+        originalReplaceState.apply(history, args);
       };
+
+      isHistoryPatched = true;
     };
 
     /**
@@ -173,7 +186,6 @@ const HolyLoader = ({
         }
 
         startProgress();
-        stopProgressOnHistoryUpdate();
       } catch (error) {
         stopProgress();
       }
@@ -192,6 +204,7 @@ const HolyLoader = ({
       });
 
       document.addEventListener('click', handleClick);
+      stopProgressOnHistoryUpdate();
     } catch (error) {}
 
     return () => {
