@@ -131,7 +131,7 @@ const HolyLoader = ({
     /**
      * Flag to prevent redundant patching of History API methods.
      * This is essential to avoid pushState & replaceState increasingly nesting
-     * withing patched versions of itself
+     * within patched versions of itself
      */
     let isHistoryPatched = false;
 
