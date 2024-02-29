@@ -52,6 +52,12 @@ export interface HolyLoaderProps {
    * Default: false
    */
   showSpinner?: boolean;
+
+  /**
+   * Specifies the class attribute value.
+   * Default: undefined
+   */
+  className?: string;
 }
 
 /**
@@ -112,6 +118,7 @@ const HolyLoader = ({
   zIndex = DEFAULTS.zIndex,
   boxShadow,
   showSpinner = DEFAULTS.showSpinner,
+  className = DEFAULTS.className,
 }: HolyLoaderProps): null => {
   React.useEffect(() => {
     let holyProgress: HolyProgress;
@@ -201,6 +208,7 @@ const HolyLoader = ({
         zIndex,
         boxShadow,
         showSpinner,
+        className,
       });
 
       document.addEventListener('click', handleClick);
