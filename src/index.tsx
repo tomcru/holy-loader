@@ -110,7 +110,7 @@ const HolyLoader = ({
   easing = DEFAULTS.easing,
   speed = DEFAULTS.speed,
   zIndex = DEFAULTS.zIndex,
-  boxShadow,
+  boxShadow = DEFAULTS.boxShadow,
   showSpinner = DEFAULTS.showSpinner,
 }: HolyLoaderProps): null => {
   React.useEffect(() => {

@@ -70,14 +70,14 @@ export class HolyProgress {
    */
   constructor(customSettings?: Partial<HolyProgressProps>) {
     const defaultSettings: HolyProgressProps = {
-      initialPosition: 0.08,
-      easing: 'linear',
-      speed: 200,
+      initialPosition: DEFAULTS.initialPosition,
+      easing: DEFAULTS.easing,
+      speed: DEFAULTS.speed,
       color: DEFAULTS.color,
-      height: 4,
-      zIndex: 2147483647,
-      boxShadow: undefined,
-      showSpinner: false,
+      height: DEFAULTS.height,
+      zIndex: DEFAULTS.zIndex,
+      boxShadow: DEFAULTS.boxShadow,
+      showSpinner: DEFAULTS.showSpinner,
     };
 
     this.settings = { ...defaultSettings, ...customSettings };
