@@ -85,6 +85,26 @@ export default function RootLayout({ children }) {
 }
 ```
 
+### Programmatic Control
+
+Have an async operation before an eventual route change? You might be interested in holy-loader's manual controls:
+
+```typescript
+import { startHolyProgress, stopHolyProgress } from 'holy-loader';
+
+try {
+  startHolyProgress(); // Trigger the loader beforehand
+  await signOut(); // Example async operation
+} catch (error) {
+  stopHolyProgress(); // Stop the loader on error
+  // Handle the error
+} finally {
+  stopHolyProgress(); // Stop the loader after the operation, and potentially do something else
+  /* OR */
+  router.push('/'); // Navigate to the desired route, which will automatically stop the loader
+}
+```
+
 ## Common issues
 
 Prevent triggering the loader when clicking a Button within a Next link:
