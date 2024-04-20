@@ -200,7 +200,7 @@ export class HolyProgress {
 
   /**
    * Performs automatic incrementation of the progress bar.
-   * This function is recursive and continues to increment the progress at intervals defined by `sppeed`.
+   * This function is recursive and continues to increment the progress at intervals defined by `speed`.
    * @private
    */
   private readonly startTrickle = (): void => {

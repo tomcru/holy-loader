@@ -8,3 +8,6 @@ export const DEFAULTS = {
   showSpinner: false,
   boxShadow: undefined,
 };
+
+export const START_HOLY_EVENT = 'holy-progress-start';
+export const STOP_HOLY_EVENT = 'holy-progress-stop';
