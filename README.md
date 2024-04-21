@@ -85,11 +85,13 @@ export default function RootLayout({ children }) {
 }
 ```
 
-### Programmatic Control
+### Programmatic Control (Client Components)
 
-Have an async operation before an eventual route change? You might be interested in holy-loader's manual controls:
+Have an async operation before an eventual route change? You might be interested in holy-loader's manual controls. These only work in client components!
 
 ```typescript
+'use client';
+
 import { startHolyProgress, stopHolyProgress } from 'holy-loader';
 
 try {
