@@ -214,7 +214,7 @@ const HolyLoader = ({
     };
 
     try {
-      if (holyProgressRef.current !== null) {
+      if (holyProgressRef.current === null) {
         holyProgressRef.current = new HolyProgress({
           color,
           height,
