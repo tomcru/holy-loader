@@ -184,15 +184,15 @@ export class HolyProgress {
    * @public
    * @returns {HolyProgress} The current instance for chaining methods.
    */
-  public start = (): HolyProgress => {
+  public readonly start = (): HolyProgress => {
     if (this.status === null) {
       this.setTo(0);
-    }
 
-    this.startTrickle();
+      this.startTrickle();
 
-    if (this.settings.showSpinner === true) {
-      this.createSpinner();
+      if (this.settings.showSpinner === true) {
+        this.createSpinner();
+      }
     }
 
     return this;
@@ -219,7 +219,7 @@ export class HolyProgress {
    * @public
    * @returns {HolyProgress} The current instance for chaining methods.
    */
-  public complete = (): HolyProgress => this.setTo(1);
+  public readonly complete = (): HolyProgress => this.setTo(1);
 
   /**
    * Calculates an increment value based on the current status of the progress.
