@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { HolyProgress } from './HolyProgress';
-import { DEFAULTS } from './constants';
+import { DEFAULTS, START_HOLY_EVENT, STOP_HOLY_EVENT } from './constants';
 
 export interface HolyLoaderProps {
   /**
@@ -98,6 +98,20 @@ export const isSameHost = (currentUrl: string, newUrl: string): boolean => {
 };
 
 /**
+ * Dispatches the event to manually start the HolyLoader progress bar.
+ */
+export const startHolyLoader = (): void => {
+  document.dispatchEvent(new Event(START_HOLY_EVENT));
+};
+
+/**
+ * Dispatches the event to manually stop the HolyLoader progress bar.
+ */
+export const stopHolyLoader = (): void => {
+  document.dispatchEvent(new Event(STOP_HOLY_EVENT));
+};
+
+/**
  * HolyLoader is a React component that provides a customizable top-loading progress bar.
  *
  * @param {HolyLoaderProps} props The properties for configuring the HolyLoader.
@@ -113,18 +127,26 @@ const HolyLoader = ({
   boxShadow = DEFAULTS.boxShadow,
   showSpinner = DEFAULTS.showSpinner,
 }: HolyLoaderProps): null => {
-  React.useEffect(() => {
-    let holyProgress: HolyProgress;
+  const holyProgressRef = React.useRef<HolyProgress | null>(null);
 
+  React.useEffect(() => {
     const startProgress = (): void => {
+      if (holyProgressRef.current === null) {
+        return;
+      }
+
       try {
-        holyProgress.start();
+        holyProgressRef.current.start();
       } catch (error) {}
     };
 
     const stopProgress = (): void => {
+      if (holyProgressRef.current === null) {
+        return;
+      }
+
       try {
-        holyProgress.complete();
+        holyProgressRef.current.complete();
       } catch (error) {}
     };
 
@@ -192,25 +214,31 @@ const HolyLoader = ({
     };
 
     try {
-      holyProgress = new HolyProgress({
-        color,
-        height,
-        initialPosition,
-        easing,
-        speed,
-        zIndex,
-        boxShadow,
-        showSpinner,
-      });
+      if (holyProgressRef.current === null) {
+        holyProgressRef.current = new HolyProgress({
+          color,
+          height,
+          initialPosition,
+          easing,
+          speed,
+          zIndex,
+          boxShadow,
+          showSpinner,
+        });
+      }
 
       document.addEventListener('click', handleClick);
+      document.addEventListener(START_HOLY_EVENT, startProgress);
+      document.addEventListener(STOP_HOLY_EVENT, stopProgress);
       stopProgressOnHistoryUpdate();
     } catch (error) {}
 
     return () => {
       document.removeEventListener('click', handleClick);
+      document.removeEventListener(START_HOLY_EVENT, startProgress);
+      document.removeEventListener(STOP_HOLY_EVENT, stopProgress);
     };
-  }, []);
+  }, [holyProgressRef]);
 
   return null;
 };
