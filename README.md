@@ -92,16 +92,16 @@ Have an async operation before an eventual route change? You might be interested
 ```typescript
 'use client';
 
-import { startHolyProgress, stopHolyProgress } from 'holy-loader';
+import { startHolyLoader, stopHolyLoader } from 'holy-loader';
 
 try {
-  startHolyProgress(); // Trigger the loader beforehand
+  startHolyLoader(); // Trigger the loader beforehand
   await signOut(); // Example async operation
 } catch (error) {
-  stopHolyProgress(); // Stop the loader on error
+  stopHolyLoader(); // Stop the loader on error
   // Handle the error
 } finally {
-  stopHolyProgress(); // Stop the loader after the operation, and potentially do something else
+  stopHolyLoader(); // Stop the loader after the operation, and potentially do something else
   /* OR */
   router.push('/'); // Navigate to the desired route, which will automatically stop the loader
 }

@@ -100,14 +100,14 @@ export const isSameHost = (currentUrl: string, newUrl: string): boolean => {
 /**
  * Dispatches the event to manually start the HolyLoader progress bar.
  */
-export const startHolyProgress = (): void => {
+export const startHolyLoader = (): void => {
   document.dispatchEvent(new Event(START_HOLY_EVENT));
 };
 
 /**
  * Dispatches the event to manually stop the HolyLoader progress bar.
  */
-export const stopHolyProgress = (): void => {
+export const stopHolyLoader = (): void => {
   document.dispatchEvent(new Event(STOP_HOLY_EVENT));
 };
 
