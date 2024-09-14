@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isSameHost } from '../index';
+import { isSameHost } from '../utils';
 
 globalThis.window = {
   // @ts-expect-error - we don't need to implement all of the window object

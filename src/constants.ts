@@ -7,6 +7,7 @@ export const DEFAULTS = {
   zIndex: 2147483647,
   showSpinner: false,
   boxShadow: undefined,
+  ignoreSearchParams: false,
 };
 
 export const START_HOLY_EVENT = 'holy-progress-start';

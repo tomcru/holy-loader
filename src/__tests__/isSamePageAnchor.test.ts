@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isSamePageAnchor } from '../index';
+import { isSamePageAnchor } from '../utils';
 
 globalThis.window = {
   // @ts-expect-error - we don't need to implement all of the window object

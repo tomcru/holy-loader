@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import { toAbsoluteURL } from '../index';
+import { toAbsoluteURL } from '../utils';
 
 globalThis.window = {
   // @ts-expect-error - we don't need to implement all of the window object
