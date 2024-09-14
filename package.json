@@ -42,7 +42,7 @@
   "homepage": "https://github.com/tomcru/holy-loader#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tomcru/holy-loader.git"
+    "url": "git+https://github.com/tomcru/holy-loader.git"
   },
   "author": {
     "name": "Tom Rumpf",
