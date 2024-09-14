@@ -8,6 +8,7 @@ import {
   isSamePageAnchor,
   toAbsoluteURL,
   hasSameQueryParameters,
+  isSamePathname,
 } from './utils';
 
 export interface HolyLoaderProps {
@@ -139,6 +140,16 @@ const HolyLoader = ({
 
       const originalPushState = history.pushState.bind(history);
       history.pushState = (...args) => {
+        const url = args[2];
+        if (
+          url &&
+          isSamePathname(window.location.href, url) &&
+          (ignoreSearchParams ||
+            hasSameQueryParameters(window.location.href, url))
+        ) {
+          originalPushState(...args);
+          return;
+        }
         stopProgress();
         originalPushState(...args);
       };
@@ -146,6 +157,16 @@ const HolyLoader = ({
       // This is crucial for Next.js Link components using the 'replace' prop.
       const originalReplaceState = history.replaceState.bind(history);
       history.replaceState = (...args) => {
+        const url = args[2];
+        if (
+          url &&
+          isSamePathname(window.location.href, url) &&
+          (ignoreSearchParams ||
+            hasSameQueryParameters(window.location.href, url))
+        ) {
+          originalReplaceState(...args);
+          return;
+        }
         stopProgress();
         originalReplaceState(...args);
       };
@@ -163,6 +184,7 @@ const HolyLoader = ({
       try {
         const target = event.target as HTMLElement;
         const anchor = target.closest('a');
+
         if (
           anchor === null ||
           anchor.target === '_blank' ||
@@ -174,9 +196,10 @@ const HolyLoader = ({
           isSamePageAnchor(window.location.href, anchor.href) ||
           // Skip if URL uses a non-http/https protocol (mailto:, tel:, etc.).
           !toAbsoluteURL(anchor.href).startsWith('http') ||
-          // Skip if ignoreSearchParams is true and only search parameters changed
-          (ignoreSearchParams &&
-            !hasSameQueryParameters(window.location.href, anchor.href))
+          // Skip if the URL is the same as the current page
+          (isSamePathname(window.location.href, anchor.href) &&
+            (ignoreSearchParams ||
+              hasSameQueryParameters(window.location.href, anchor.href)))
         ) {
           return;
         }

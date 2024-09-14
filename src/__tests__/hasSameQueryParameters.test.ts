@@ -27,9 +27,21 @@ describe('hasSameQueryParameters', () => {
     expect(hasSameQueryParameters(currentUrl, newUrl)).toBe(true);
   });
 
-  it('should return false when new URL has no search paramters', () => {
+  it('should return false when first URL is missing search parameters', () => {
+    const currentUrl = 'https://example.com/page';
+    const newUrl = 'https://example.com/page?a=1&b=2';
+    expect(hasSameQueryParameters(currentUrl, newUrl)).toBe(false);
+  });
+
+  it('should return false when second URL is missing search parameters', () => {
     const currentUrl = 'https://example.com/page?a=1&b=2';
     const newUrl = 'https://example.com/page';
     expect(hasSameQueryParameters(currentUrl, newUrl)).toBe(false);
+  });
+
+  it('should work with URL object as second parameter', () => {
+    const currentUrl = 'https://example.com/page?a=1&b=2';
+    const newUrl = new URL('https://example.com/page?a=1&b=2');
+    expect(hasSameQueryParameters(currentUrl, newUrl)).toBe(true);
   });
 });
