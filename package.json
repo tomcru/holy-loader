@@ -28,8 +28,6 @@
   ],
   "scripts": {
     "build": "tsup",
-    "lint:fix": "eslint --ignore-path .eslintignore --fix --ext .js,.ts . && npm run format:fix",
-    "format:fix": "prettier --ignore-path .gitignore --write \"src/**/*.{ts,tsx}\"",
     "test": "vitest -c ./vitest.config.ts"
   },
   "files": [
@@ -55,17 +53,6 @@
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
-    "@typescript-eslint/eslint-plugin": "^6.14.0",
-    "@typescript-eslint/parser": "^6.14.0",
-    "eslint": "^8.55.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-config-standard-with-typescript": "^42.0.0",
-    "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-n": "^16.4.0",
-    "eslint-plugin-prettier": "^5.0.1",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.33.2",
-    "prettier": "^3.1.1",
     "react": "^18.2.0",
     "tsup": "^8.0.1",
     "typescript": "^5.6.2",
