@@ -176,7 +176,7 @@ const HolyLoader = ({
           !toAbsoluteURL(anchor.href).startsWith('http') ||
           // Skip if ignoreSearchParams is true and only search parameters changed
           (ignoreSearchParams &&
-            hasSameQueryParameters(window.location.href, anchor.href))
+            !hasSameQueryParameters(window.location.search, anchor.search))  
         ) {
           return;
         }
