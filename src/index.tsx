@@ -60,7 +60,7 @@ export interface HolyLoaderProps {
   showSpinner?: boolean;
 
   /**
-   * Specifies whether the search parameters should be ignored when evaluating
+   * Specifies if search parameters should be ignored when evaluating
    * whether to start the progress bar.
    * Default: false
    */

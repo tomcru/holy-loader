@@ -131,5 +131,6 @@ onClick={(e) => {
 - `zIndex` (number): Defines the z-index property of the top-loading bar, controlling its stacking order. Default: 2147483647.
 - `boxShadow` (string): Sets the box-shadow property of the top-loading bar. Turned off by default.
 - `showSpinner` (boolean): Determines whether to accompany the loading bar with a spinner. Turned off by default.
+- `ignoreSearchParams` (boolean): Determines whether to ignore search parameters in the URL when triggering the loader. Turned off by default.
 
 Project inspired by [nextjs-toploader](https://github.com/TheSGJ/nextjs-toploader) & [nprogress](https://github.com/rstacruz/nprogress)
