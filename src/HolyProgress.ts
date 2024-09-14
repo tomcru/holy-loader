@@ -125,7 +125,7 @@ export class HolyProgress {
         this.repaint(progress);
 
         setTimeout(() => {
-          progress.style.transition = 'all ' + speed + 'ms linear';
+          progress.style.transition = `all ${speed}ms linear`;
           progress.style.opacity = '0';
           setTimeout(() => {
             this.removeBar();
@@ -307,7 +307,7 @@ export class HolyProgress {
 
     this.bar.style.background = this.settings.color;
     if (typeof this.settings.height === 'number') {
-      this.bar.style.height = this.settings.height + 'px';
+      this.bar.style.height = `${this.settings.height}px`;
     } else {
       this.bar.style.height = this.settings.height;
     }
@@ -317,7 +317,7 @@ export class HolyProgress {
     this.bar.style.top = '0';
     this.bar.style.left = '0';
     this.bar.style.transition = 'all 0 linear';
-    this.bar.style.transform = 'translate3d(' + percentage + '%,0,0)';
+    this.bar.style.transform = `translate3d(${percentage}%,0,0)`;
     this.bar.style.boxShadow = this.settings.boxShadow ?? '';
 
     document.body.appendChild(progress);
@@ -395,7 +395,7 @@ export class HolyProgress {
    */
   private readonly removeBar = (): void => {
     const bar = document.getElementById('holy-progress');
-    bar !== null && bar.remove();
+    bar?.remove();
   };
 
   /**
@@ -405,7 +405,7 @@ export class HolyProgress {
    */
   private readonly removeSpinner = (): void => {
     const spinner = document.getElementById('holy-progress-spinner');
-    spinner !== null && spinner.remove();
+    spinner?.remove();
   };
 
   /**
@@ -428,11 +428,11 @@ export class HolyProgress {
 
     if (transformProp !== '' && `${transformProp}Perspective` in style) {
       return 'translate3d';
-    } else if (transformProp !== '') {
-      return 'translate';
-    } else {
-      return 'margin';
     }
+    if (transformProp !== '') {
+      return 'translate';
+    }
+    return 'margin';
   };
 
   /**
@@ -444,7 +444,7 @@ export class HolyProgress {
    */
   private readonly barPositionCSS = (n: number): Record<string, string> => {
     const transformStrategy = this.getTransformStrategy();
-    const barPosition = this.toBarPercentage(n) + '%';
+    const barPosition = `${this.toBarPercentage(n)}%`;
 
     if (transformStrategy === 'translate3d') {
       return { transform: `translate3d(${barPosition},0,0)` };
