@@ -17,7 +17,8 @@ Also check out [Holy Time](https://github.com/badosz0/holy-time), yet another (t
 - Highly customizable with sensible defaults.
 - Utilizes a custom implementation for smooth, aesthetic progress indications.
 - Supports dynamic configuration for color, height, speed, easing, and more.
-- Supports manual controls - starting & stopping the loader yourself.
+- Manual controls: Start & stop the loader yourself.
+- i18n ready: Supports LTR (left-to-right) & RTL (right-to-left) layouts with the `dir` prop.
 
 ## Installation
 
@@ -96,15 +97,14 @@ Have an async operation before an eventual route change? You might be interested
 import { startHolyLoader, stopHolyLoader } from 'holy-loader';
 
 try {
-  startHolyLoader(); // Trigger the loader beforehand
-  await signOut(); // Example async operation
+  startHolyLoader();
+  await signOut()
 } catch (error) {
-  stopHolyLoader(); // Stop the loader on error
-  // Handle the error
+  stopHolyLoader();
 } finally {
-  stopHolyLoader(); // Stop the loader after the operation, and potentially do something else
+  stopHolyLoader();
   /* OR */
-  router.push('/'); // Navigate to the desired route, which will automatically stop the loader
+  router.push('/');
 }
 ```
 
@@ -132,5 +132,4 @@ onClick={(e) => {
 - `boxShadow` (string): Sets the box-shadow property of the top-loading bar. Turned off by default.
 - `showSpinner` (boolean): Determines whether to accompany the loading bar with a spinner. Turned off by default.
 - `ignoreSearchParams` (boolean): Determines whether to ignore search parameters in the URL when triggering the loader. Turned off by default.
-
-Project inspired by [nextjs-toploader](https://github.com/TheSGJ/nextjs-toploader) & [nprogress](https://github.com/rstacruz/nprogress)
+- `dir` ('ltr' | 'rtl'): Sets the direction of the top-loading bar. Default: 'ltr'.
