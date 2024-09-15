@@ -17,8 +17,8 @@ Also check out [Holy Time](https://github.com/badosz0/holy-time), yet another (t
 - Highly customizable with sensible defaults.
 - Utilizes a custom implementation for smooth, aesthetic progress indications.
 - Supports dynamic configuration for color, height, speed, easing, and more.
-- Manual controls: Start & stop the loader yourself.
-- i18n ready: Supports LTR (left-to-right) & RTL (right-to-left) layouts with the `dir` prop.
+- **Manual controls**: Start & stop the loader yourself.
+- **i18n ready**: Supports `ltr` (left-to-right) & `rtl` (right-to-left) layouts with the `dir` prop.
 
 ## Installation
 
