@@ -84,3 +84,29 @@ export const isSamePathname = (
   const next = newUrl instanceof URL ? newUrl : new URL(toAbsoluteURL(newUrl));
   return current.pathname === next.pathname;
 };
+
+export const clamp = (n: number, min: number, max: number): number =>
+  Math.max(min, Math.min(n, max));
+
+export const queue = (() => {
+  const pending: Array<(next: () => void) => void> = [];
+
+  const next = (): void => {
+    const fn = pending.shift();
+    if (fn !== undefined) {
+      fn(next);
+    }
+  };
+
+  return (fn: (next: () => void) => void) => {
+    pending.push(fn);
+    if (pending.length === 1) {
+      next();
+    }
+  };
+})();
+
+export const repaintElement = (obj: HTMLElement): HTMLElement => {
+  void obj.offsetWidth;
+  return obj;
+};

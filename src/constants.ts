@@ -8,7 +8,8 @@ export const DEFAULTS = {
   showSpinner: false,
   boxShadow: undefined,
   ignoreSearchParams: false,
-};
+  dir: 'ltr',
+} as const;
 
 export const START_HOLY_EVENT = 'holy-progress-start';
 export const STOP_HOLY_EVENT = 'holy-progress-stop';

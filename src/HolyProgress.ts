@@ -1,4 +1,5 @@
 import { DEFAULTS } from './constants';
+import { clamp, repaintElement, queue } from './utils';
 
 type HolyProgressProps = {
   /**
@@ -48,6 +49,12 @@ type HolyProgressProps = {
    * Default: false
    */
   showSpinner?: boolean;
+
+  /**
+   * Specifies the direction of the loading bar.
+   * Default: "ltr"
+   */
+  dir?: 'ltr' | 'rtl';
 };
 
 type TransformStrategy = 'translate3d' | 'translate' | 'margin';
@@ -60,7 +67,11 @@ type TransformStrategy = 'translate3d' | 'translate' | 'margin';
 export class HolyProgress {
   private readonly settings: HolyProgressProps;
 
-  private status: number | null;
+  /**
+   * The progres of the bar as a number between 0 and 1.
+   * If 0 is reached, the status is null
+   */
+  private progressN: number | null;
 
   private bar: HTMLElement | null;
 
@@ -69,19 +80,8 @@ export class HolyProgress {
    * @param {Partial<HolyProgressProps>} [customSettings] - Optional custom settings to override defaults.
    */
   constructor(customSettings?: Partial<HolyProgressProps>) {
-    const defaultSettings: HolyProgressProps = {
-      initialPosition: DEFAULTS.initialPosition,
-      easing: DEFAULTS.easing,
-      speed: DEFAULTS.speed,
-      color: DEFAULTS.color,
-      height: DEFAULTS.height,
-      zIndex: DEFAULTS.zIndex,
-      boxShadow: DEFAULTS.boxShadow,
-      showSpinner: DEFAULTS.showSpinner,
-    };
-
-    this.settings = { ...defaultSettings, ...customSettings };
-    this.status = null;
+    this.settings = { ...DEFAULTS, ...customSettings };
+    this.progressN = null;
     this.bar = null;
   }
 
@@ -92,79 +92,50 @@ export class HolyProgress {
    * @returns {HolyProgress} The current instance for chaining methods.
    */
   private readonly setTo = (n: number): HolyProgress => {
-    const isStarted = typeof this.status === 'number';
+    console.log('setTo', n);
+    const isStarted = typeof this.progressN === 'number';
 
-    n = this.clamp(n, this.settings.initialPosition, 1);
+    n = clamp(n, this.settings.initialPosition, 1);
 
-    this.status = n === 1 ? null : n;
+    this.progressN = n === 1 ? null : n;
 
-    const progress = this.getOrCreateBar(!isStarted);
+    const progressBar = this.getOrCreateBar(!isStarted);
 
-    if (progress === null) {
+    if (!progressBar) {
       return this;
     }
 
-    const speed = this.settings.speed;
+    repaintElement(progressBar);
 
-    this.repaint(progress);
-
-    this.queue((next) => {
-      const css = this.barPositionCSS(n);
-
-      if (this.bar === null) {
+    queue((next) => {
+      if (!this.bar) {
         return;
       }
 
-      Object.assign(this.bar.style, css, {
-        transition: `all ${speed}ms ${this.settings.easing}`,
+      Object.assign(this.bar.style, this.barPositionCSS(n), {
+        transition: `all ${this.settings.speed}ms ${this.settings.easing}`,
       });
 
       if (n === 1) {
-        progress.style.transition = 'none';
-        progress.style.opacity = '1';
-        this.repaint(progress);
+        progressBar.style.transition = 'none';
+        progressBar.style.opacity = '1';
+        repaintElement(progressBar);
 
         setTimeout(() => {
-          progress.style.transition = `all ${speed}ms linear`;
-          progress.style.opacity = '0';
+          progressBar.style.transition = `all ${this.settings.speed}ms linear`;
+          progressBar.style.opacity = '0';
           setTimeout(() => {
-            this.removeBar();
+            this.removeBarFromDOM();
             next();
-          }, speed);
+          }, this.settings.speed);
 
-          this.removeSpinner();
-        }, speed);
+          this.removeSpinnerFromDOM();
+        }, this.settings.speed);
       } else {
-        setTimeout(next, speed);
+        setTimeout(next, this.settings.speed);
       }
     });
     return this;
-  };
-
-  /**
-   * Clamps a number within the inclusive range specified by the given minimum and maximum.
-   * @private
-   * @param {number} n - The number to clamp.
-   * @param {number} min - The lower boundary of the output range.
-   * @param {number} max - The upper boundary of the output range.
-   * @returns {number} The clamped value.
-   */
-  private readonly clamp = (n: number, min: number, max: number): number => {
-    if (n < min) return min;
-    if (n > max) return max;
-    return n;
-  };
-
-  /**
-   * Triggers a repaint on the specified HTML element.
-   * This function is used to ensure that CSS transitions are properly triggered.
-   * @private
-   * @param {HTMLElement} obj - The HTML element to repaint.
-   * @returns {HTMLElement} The same HTML element, for chaining.
-   */
-  private readonly repaint = (obj: HTMLElement): HTMLElement => {
-    void obj.offsetWidth;
-    return obj;
   };
 
   /**
@@ -175,7 +146,8 @@ export class HolyProgress {
    * @returns {number} The percentage representation of the progress value.
    */
   private readonly toBarPercentage = (n: number): number => {
-    return (-1 + n) * 100;
+    console.log('toBarPercentage', n);
+    return this.settings.dir === 'ltr' ? (-1 + n) * 100 : (1 - n) * 100;
   };
 
   /**
@@ -185,7 +157,7 @@ export class HolyProgress {
    * @returns {HolyProgress} The current instance for chaining methods.
    */
   public readonly start = (): HolyProgress => {
-    if (this.status === null) {
+    if (this.progressN === null) {
       this.setTo(0);
 
       this.startTrickle();
@@ -205,9 +177,9 @@ export class HolyProgress {
    */
   private readonly startTrickle = (): void => {
     const run = (): void => {
-      if (this.status === null) return;
+      if (this.progressN === null) return;
 
-      this.increment();
+      this.incrementStatus();
       setTimeout(run, this.settings.speed);
     };
 
@@ -240,45 +212,27 @@ export class HolyProgress {
    * @param {number} [amount] - The amount to increment the progress bar.
    * @returns {HolyProgress} The current instance for chaining methods.
    */
-  private readonly increment = (amount?: number): HolyProgress => {
-    if (this.status === null) {
+  private readonly incrementStatus = (amount?: number): HolyProgress => {
+    if (this.progressN === null) {
       return this.start();
     }
 
-    if (this.status > 1) {
+    if (this.progressN > 1) {
       return this;
     }
 
     if (typeof amount !== 'number') {
-      amount = this.calculateIncrement(this.status);
+      amount = this.calculateIncrement(this.progressN);
     }
 
-    this.status = this.clamp(this.status + amount, 0, 0.994);
+    /**
+     * Do not clamp to 1 - the progress bar can only fully finish by being set to 1 by the user.
+     * This prevents the progress bar completing itself by incrementing to 1 before an action has been completed or a page loaded.
+     */
+    this.progressN = clamp(this.progressN + amount, 0, 0.994);
 
-    return this.setTo(this.status);
+    return this.setTo(this.progressN);
   };
-
-  /**
-   * A function to manage the queue of operations to be performed on the progress bar.
-   * It ensures that operations are executed in sequence.
-   * @private
-   * @returns {Function} A function that accepts a callback to be queued.
-   */
-  private readonly queue = (() => {
-    const pending: Array<(next: () => void) => void> = [];
-
-    const next = (): void => {
-      const fn = pending.shift();
-      if (fn !== undefined) {
-        fn(next);
-      }
-    };
-
-    return (fn: (next: () => void) => void) => {
-      pending.push(fn);
-      if (pending.length === 1) next();
-    };
-  })();
 
   /**
    * Creates and initializes a new progress bar element in the DOM.
@@ -288,22 +242,22 @@ export class HolyProgress {
    * @returns {HTMLElement | null} The created progress bar element, or null if creation fails.
    */
   private readonly createBar = (fromStart: boolean): HTMLElement | null => {
-    const progress = document.createElement('div');
-    progress.id = 'holy-progress';
-    progress.style.pointerEvents = 'none';
-    progress.innerHTML = '<div class="bar" role="bar"></div>';
+    const barContainer = document.createElement('div');
+    barContainer.id = 'holy-progress';
+    barContainer.style.pointerEvents = 'none';
+    barContainer.innerHTML = '<div class="bar" role="bar"></div>';
 
-    const bar = progress.querySelector('[role="bar"]');
+    this.bar = barContainer.querySelector(
+      '[role="bar"]',
+    ) satisfies HTMLElement | null;
 
-    if (bar === null) {
+    if (!this.bar) {
       return null;
     }
 
-    this.bar = bar as HTMLElement;
-
-    const percentage = fromStart
-      ? '-100'
-      : this.toBarPercentage(this.status ?? 0);
+    const percentage = this.toBarPercentage(
+      fromStart ? 0 : (this.progressN ?? 0),
+    );
 
     this.bar.style.background = this.settings.color;
     if (typeof this.settings.height === 'number') {
@@ -320,9 +274,9 @@ export class HolyProgress {
     this.bar.style.transform = `translate3d(${percentage}%,0,0)`;
     this.bar.style.boxShadow = this.settings.boxShadow ?? '';
 
-    document.body.appendChild(progress);
+    document.body.appendChild(barContainer);
 
-    return progress;
+    return barContainer;
   };
 
   /**
@@ -371,42 +325,14 @@ export class HolyProgress {
     document.body.appendChild(spinner);
   };
 
-  /**
-   * Retrieves the existing progress bar element from the DOM, or creates a new one if not present.
-   * @private
-   * @param {boolean} fromStart - Indicates if the bar should be retrieved/created from the start position.
-   * @returns {HTMLElement | null} The retrieved or newly created progress bar element.
-   */
-  private readonly getOrCreateBar = (
-    fromStart: boolean,
-  ): HTMLElement | null => {
-    const bar = document.getElementById('holy-progress');
-    if (bar !== null) {
-      return bar;
-    }
+  private readonly getOrCreateBar = (fromStart: boolean): HTMLElement | null =>
+    document.getElementById('holy-progress') ?? this.createBar(fromStart);
 
-    return this.createBar(fromStart);
-  };
+  private readonly removeBarFromDOM = (): void =>
+    document.getElementById('holy-progress')?.remove();
 
-  /**
-   * Removes the progress bar element from the DOM.
-   * @private
-   * @returns {void}
-   */
-  private readonly removeBar = (): void => {
-    const bar = document.getElementById('holy-progress');
-    bar?.remove();
-  };
-
-  /**
-   * Removes the spinner element from the DOM.
-   * @private
-   * @returns {void}
-   */
-  private readonly removeSpinner = (): void => {
-    const spinner = document.getElementById('holy-progress-spinner');
-    spinner?.remove();
-  };
+  private readonly removeSpinnerFromDOM = (): void =>
+    document.getElementById('holy-progress-spinner')?.remove();
 
   /**
    * Determines the most suitable CSS positioning strategy based on browser capabilities.

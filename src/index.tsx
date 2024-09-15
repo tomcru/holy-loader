@@ -66,6 +66,12 @@ export interface HolyLoaderProps {
    * Default: false
    */
   ignoreSearchParams?: boolean;
+
+  /**
+   * Specifies the direction of the loading bar.
+   * Default: "ltr"
+   */
+  dir?: 'ltr' | 'rtl';
 }
 
 /**
@@ -98,6 +104,7 @@ const HolyLoader = ({
   boxShadow = DEFAULTS.boxShadow,
   showSpinner = DEFAULTS.showSpinner,
   ignoreSearchParams = DEFAULTS.ignoreSearchParams,
+  dir = DEFAULTS.dir, 
 }: HolyLoaderProps): null => {
   const holyProgressRef = React.useRef<HolyProgress | null>(null);
 
@@ -221,6 +228,7 @@ const HolyLoader = ({
           zIndex,
           boxShadow,
           showSpinner,
+          dir
         });
       }
 
