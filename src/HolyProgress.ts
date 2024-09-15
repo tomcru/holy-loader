@@ -92,7 +92,6 @@ export class HolyProgress {
    * @returns {HolyProgress} The current instance for chaining methods.
    */
   private readonly setTo = (n: number): HolyProgress => {
-    console.log('setTo', n);
     const isStarted = typeof this.progressN === 'number';
 
     n = clamp(n, this.settings.initialPosition, 1);
@@ -145,10 +144,8 @@ export class HolyProgress {
    * @param {number} n - The progress value to convert.
    * @returns {number} The percentage representation of the progress value.
    */
-  private readonly toBarPercentage = (n: number): number => {
-    console.log('toBarPercentage', n);
-    return this.settings.dir === 'ltr' ? (-1 + n) * 100 : (1 - n) * 100;
-  };
+  private readonly toBarPercentage = (n: number): number =>
+    this.settings.dir === 'ltr' ? (-1 + n) * 100 : (1 - n) * 100;
 
   /**
    * Initiates the progress bar's movement. If already started, it continues from the current position.
