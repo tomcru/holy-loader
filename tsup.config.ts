@@ -6,5 +6,5 @@ export const tsup: Options = {
   entry: ['src/index.tsx'],
   keepNames: true,
   sourcemap: true,
-  format: ['cjs'],
+  format: ['cjs', 'esm'],
 };

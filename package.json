@@ -2,8 +2,10 @@
   "name": "holy-loader",
   "version": "2.3.6",
   "description": "Holy Loader is a lightweight, customizable top-loading progress bar component for React applications.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "license": "MIT",
   "keywords": [
     "react",
@@ -26,6 +28,16 @@
     "nextjs",
     "single-page-application"
   ],
+  "exports": {
+    "import": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "require": {
+      "types": "./dist/index.d.cts",
+      "require": "./dist/index.cjs"
+    }
+  },
   "scripts": {
     "build": "tsup",
     "lint": "biome check --write",
