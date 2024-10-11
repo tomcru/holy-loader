@@ -195,7 +195,7 @@ const HolyLoader = ({
         if (
           anchor === null ||
           anchor.target === '_blank' ||
-          anchor.hasAttribute('download') ||
+          anchor.download ||
           event.ctrlKey ||
           event.metaKey ||
           // Skip if URL points to a different domain
