@@ -1,5 +1,5 @@
 import { DEFAULTS } from './constants';
-import { clamp, repaintElement, queue } from './utils';
+import { clamp, queue, repaintElement } from './utils';
 
 type HolyProgressProps = {
   /**
