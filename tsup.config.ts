@@ -1,10 +1,20 @@
-import { Options } from 'tsup';
-export const tsup: Options = {
-  target: 'es6',
+import { defineConfig } from "tsup";
+import { peerDependencies } from "./package.json";
+
+const externalDependencies = peerDependencies
+  ? Object.keys(peerDependencies)
+  : [];
+
+export default defineConfig({
+  entry: ["src/index.tsx"],
+  format: ["cjs", "esm"],
+  target: ["es6"],
+  sourcemap: false,
   clean: true,
   dts: true,
-  entry: ['src/index.tsx'],
+  external: externalDependencies,
+  minify: true,
+  treeshake: true,
   keepNames: true,
-  sourcemap: true,
-  format: ['cjs', 'esm'],
-};
+  jsxFactory: "automatic",
+});
