@@ -135,3 +135,13 @@ onClick={(e) => {
 | `showSpinner`        | `boolean`            | Determines whether to accompany the loading bar with a spinner. Turned off by default.                       | `false`      |
 | `ignoreSearchParams` | `boolean`            | Determines whether to ignore search parameters in the URL when triggering the loader. Turned off by default. | `false`      |
 | `dir`                | `ltr` or `rtl`       | Sets the direction of the top-loading bar.                                                                   | `ltr`      |
+
+## Playground
+
+A simple playground page is available for testing HolyLoader.
+
+### Instructions
+
+1. Navigate to the `src/pages/Playground.tsx` file.
+2. Modify the `Playground` component as needed to test different configurations of HolyLoader.
+3. Run the application and visit the playground page to see the changes in action.
