@@ -135,3 +135,4 @@ onClick={(e) => {
 | `showSpinner`        | `boolean`            | Determines whether to accompany the loading bar with a spinner. Turned off by default.                       | `false`      |
 | `ignoreSearchParams` | `boolean`            | Determines whether to ignore search parameters in the URL when triggering the loader. Turned off by default. | `false`      |
 | `dir`                | `ltr` or `rtl`       | Sets the direction of the top-loading bar.                                                                   | `ltr`      |
+| `delay`              | `number`             | Specifies the delay in milliseconds before starting the progress bar.                                         | `0`          |

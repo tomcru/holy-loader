@@ -72,6 +72,12 @@ export interface HolyLoaderProps {
    * Default: "ltr"
    */
   dir?: 'ltr' | 'rtl';
+
+  /**
+   * Specifies the delay in milliseconds before starting the progress bar.
+   * Default: 0 milliseconds
+   */
+  delay?: number;
 }
 
 /**
@@ -104,9 +110,11 @@ const HolyLoader = ({
   boxShadow = DEFAULTS.boxShadow,
   showSpinner = DEFAULTS.showSpinner,
   ignoreSearchParams = DEFAULTS.ignoreSearchParams,
-  dir = DEFAULTS.dir, 
+  dir = DEFAULTS.dir,
+  delay = 0,
 }: HolyLoaderProps): null => {
   const holyProgressRef = React.useRef<HolyProgress | null>(null);
+  const delayTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   React.useEffect(() => {
     const startProgress = (): void => {
@@ -212,7 +220,11 @@ const HolyLoader = ({
           return;
         }
 
-        startProgress();
+        if (delay > 0) {
+          delayTimeoutRef.current = setTimeout(startProgress, delay);
+        } else {
+          startProgress();
+        }
       } catch (error) {
         stopProgress();
       }
@@ -229,7 +241,7 @@ const HolyLoader = ({
           zIndex,
           boxShadow,
           showSpinner,
-          dir
+          dir,
         });
       }
 
@@ -243,8 +255,12 @@ const HolyLoader = ({
       document.removeEventListener('click', handleClick);
       document.removeEventListener(START_HOLY_EVENT, startProgress);
       document.removeEventListener(STOP_HOLY_EVENT, stopProgress);
+
+      if (delayTimeoutRef.current !== null) {
+        clearTimeout(delayTimeoutRef.current);
+      }
     };
-  }, [holyProgressRef]);
+  }, [holyProgressRef, delay]);
 
   return null;
 };
