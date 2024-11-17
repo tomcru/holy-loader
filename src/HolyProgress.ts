@@ -125,9 +125,10 @@ export class HolyProgress {
           progressBar.style.opacity = '0';
           setTimeout(() => {
             this.removeBarFromDOM();
-            this.removeSpinnerFromDOM();
             next();
           }, this.settings.speed);
+          
+          this.removeSpinnerFromDOM();
         }, this.settings.speed);
       } else {
         setTimeout(next, this.settings.speed);
