@@ -127,7 +127,7 @@ export class HolyProgress {
             this.removeBarFromDOM();
             next();
           }, this.settings.speed);
-          
+
           this.removeSpinnerFromDOM();
         }, this.settings.speed);
       } else {
