@@ -108,6 +108,28 @@ try {
 }
 ```
 
+### Using `startHolyLoader()` before `router.push()`
+
+To eliminate the delay in loader display when navigating using `router.push()`, you can manually start the loader before calling `router.push()`. This ensures that the loader starts immediately.
+
+```typescript
+'use client';
+
+import { startHolyLoader } from 'holy-loader';
+import { useRouter } from 'next/navigation';
+
+const MyComponent = () => {
+  const router = useRouter();
+
+  const handleNavigation = () => {
+    startHolyLoader();
+    router.push('/your-page');
+  };
+
+  return <button onClick={handleNavigation}>Go to Your Page</button>;
+};
+```
+
 ## Common issues
 
 Prevent triggering the loader when clicking a Button within a Next link:
