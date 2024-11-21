@@ -1,4 +1,4 @@
-![Holy Loader](https://github.com/user-attachments/assets/4058eb51-92ce-4df2-86ac-73ce4c049ded)
+![Holy Loader](https://github.com/user-attachments/assets/ab7aa864-3d98-4689-8266-6bd01a7efbfc)
 
 <h1>Holy Loader</h1>
 <a href="https://www.npmjs.com/package/holy-loader"><img src="https://img.shields.io/npm/v/holy-loader.svg?style=flat" /></a>
