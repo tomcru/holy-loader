@@ -135,3 +135,4 @@ onClick={(e) => {
 | `showSpinner`        | `boolean`            | Determines whether to accompany the loading bar with a spinner. Turned off by default.                       | `false`      |
 | `ignoreSearchParams` | `boolean`            | Determines whether to ignore search parameters in the URL when triggering the loader. Turned off by default. | `false`      |
 | `dir`                | `ltr` or `rtl`       | Sets the direction of the top-loading bar.                                                                   | `ltr`      |
+| `skipReplaceTransitions` | `boolean`        | Specifies whether to skip the loader for replaceState transitions.                                           | `false`      |

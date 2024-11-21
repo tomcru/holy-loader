@@ -72,6 +72,12 @@ export interface HolyLoaderProps {
    * Default: "ltr"
    */
   dir?: 'ltr' | 'rtl';
+
+  /**
+   * Specifies whether to skip the loader for replaceState transitions.
+   * Default: false
+   */
+  skipReplaceTransitions?: boolean;
 }
 
 /**
@@ -104,7 +110,8 @@ const HolyLoader = ({
   boxShadow = DEFAULTS.boxShadow,
   showSpinner = DEFAULTS.showSpinner,
   ignoreSearchParams = DEFAULTS.ignoreSearchParams,
-  dir = DEFAULTS.dir, 
+  dir = DEFAULTS.dir,
+  skipReplaceTransitions = false,
 }: HolyLoaderProps): null => {
   const holyProgressRef = React.useRef<HolyProgress | null>(null);
 
@@ -166,10 +173,11 @@ const HolyLoader = ({
       history.replaceState = (...args) => {
         const url = args[2];
         if (
-          url &&
-          isSamePathname(window.location.href, url) &&
-          (ignoreSearchParams ||
-            hasSameQueryParameters(window.location.href, url))
+          skipReplaceTransitions ||
+          (url &&
+            isSamePathname(window.location.href, url) &&
+            (ignoreSearchParams ||
+              hasSameQueryParameters(window.location.href, url)))
         ) {
           originalReplaceState(...args);
           return;
