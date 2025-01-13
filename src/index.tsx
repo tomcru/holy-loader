@@ -201,7 +201,6 @@ const HolyLoader = ({
         if (
           anchor === null ||
           anchorOpensExternally ||
-          anchor.target === '_blank' ||
           anchor.hasAttribute('download') ||
           event.ctrlKey ||
           event.metaKey ||
