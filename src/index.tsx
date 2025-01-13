@@ -192,8 +192,15 @@ const HolyLoader = ({
         const target = event.target as HTMLElement;
         const anchor = target.closest('a');
 
+        /**
+         * The target attribute can have custom values which might have the link open in external contexts
+         * Links with custom `target` values, '_blank', '_parent', or '_top' are therefore treated as external.
+         */
+        const anchorOpensExternally = anchor.target && anchor.target !== '_self';
+
         if (
           anchor === null ||
+          anchorOpensExternally ||
           anchor.target === '_blank' ||
           anchor.hasAttribute('download') ||
           event.ctrlKey ||
