@@ -196,7 +196,7 @@ const HolyLoader = ({
          * The target attribute can have custom values which might have the link open in external contexts
          * Links with custom `target` values, '_blank', '_parent', or '_top' are therefore treated as external.
          */
-        const anchorOpensExternally = anchor.target && anchor.target !== '_self';
+        const anchorOpensExternally = anchor?.target && anchor.target !== '_self';
 
         if (
           anchor === null ||
