@@ -13,8 +13,6 @@ export default defineConfig({
   clean: true,
   dts: true,
   external: externalDependencies,
-  minify: true,
-  treeshake: true,
   keepNames: true,
   jsxFactory: "automatic",
 });
