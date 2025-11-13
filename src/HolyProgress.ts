@@ -242,6 +242,8 @@ export class HolyProgress {
     const barContainer = document.createElement('div');
     barContainer.id = 'holy-progress';
     barContainer.style.pointerEvents = 'none';
+    barContainer.style.position = 'fixed';
+    barContainer.style.zIndex = this.settings.zIndex.toString();
     barContainer.innerHTML = '<div class="bar" role="bar"></div>';
 
     this.bar = barContainer.querySelector(
@@ -262,7 +264,6 @@ export class HolyProgress {
     } else {
       this.bar.style.height = this.settings.height;
     }
-    this.bar.style.zIndex = this.settings.zIndex.toString();
     this.bar.style.position = 'fixed';
     this.bar.style.width = '100%';
     this.bar.style.top = '0';
@@ -294,7 +295,6 @@ export class HolyProgress {
 
     spinner.style.display = 'block';
     spinner.style.position = 'fixed';
-    spinner.style.zIndex = this.settings.zIndex.toString();
     spinner.style.top = '15px';
     spinner.style.right = '15px';
 
